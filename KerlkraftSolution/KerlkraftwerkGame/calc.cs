@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace KerlkraftwerkGame
 {
-    public class calc
+    public class Calc
     {
         public int Diff(int x, int y)
         {
-            if(x >= y)
+            if (x >= y)
             {
                 return x - y;
-            }else
+            }
+            else
             {
                 return y - x;
             }

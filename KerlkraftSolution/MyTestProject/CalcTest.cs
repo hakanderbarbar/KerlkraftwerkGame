@@ -9,7 +9,7 @@ namespace MyTestProject
         [TestMethod]
         public void TestMethod1()
         {
-            calc c = new calc();
+            Calc c = new Calc();
 
             int result = c.Diff(2, 1);
 
