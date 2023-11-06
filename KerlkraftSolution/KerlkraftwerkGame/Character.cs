@@ -10,7 +10,7 @@ public class Character
     private Vector2 position;
     private Vector2 velocity;
     private float jumpStrength = -10f;
-    private float moveSpeed = 3.0f;
+    private float moveSpeed = 1.0f;
     private float gravity = 0.5f;
 
 
@@ -52,8 +52,6 @@ public class Character
 
     public void Update()
     {
-        position.X += moveSpeed;
-
         if (!isOnGround)
         {
             velocity.Y += gravity;

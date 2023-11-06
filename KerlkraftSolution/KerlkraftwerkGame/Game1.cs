@@ -9,8 +9,10 @@ namespace KerlkraftwerkGame
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private Character character;
-        private Steuerung steuerung;
-  
+        private int screenWidth = 1280;
+        private int screenHeight = 720;
+        private float scale = 0.5f;
+
 
         public Game1()
         {
@@ -22,7 +24,7 @@ namespace KerlkraftwerkGame
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            this.graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -30,26 +32,29 @@ namespace KerlkraftwerkGame
         {
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
- 
-
             // Erstelle die Figur
             character = new Character(this.GraphicsDevice);
             character.LoadContent(Content);
 
-            steuerung = new Steuerung(character);
         }
 
         protected override void Update(GameTime gameTime)
         {
-
+            KeyboardState state = Keyboard.GetState();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 this.Exit();
             }
 
-            // Aktualisiere die Steuerung
-            steuerung.Update();
+            //Je nachdem welche Taste gedrückt, wird hier eine entsprechende Reaktion gezeigt
+          
+            //if (state.IsKeyDown(Keys.Up))
+            //{
+             //   moveDirection.Y -= 1;
+            //}
+
+
 
             // Aktualisiere die Character-Klasse
             character.Update();
