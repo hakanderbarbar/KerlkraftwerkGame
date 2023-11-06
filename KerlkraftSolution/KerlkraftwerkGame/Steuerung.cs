@@ -1,5 +1,5 @@
-using Microsoft.Xna.Framework.Input;
 using System;
+using Microsoft.Xna.Framework.Input;
 
 namespace KerlkraftwerkGame
 {
@@ -17,7 +17,7 @@ namespace KerlkraftwerkGame
             KeyboardState keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Up))
             {
-                character.Jump();
+                this.character.Jump();
             }
         }
     }

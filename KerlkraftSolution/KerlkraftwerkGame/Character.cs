@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 public class Character
 {
     private GraphicsDevice graphicsDevice;
-    private float groundY = 350; //350 perfekt auf dem Boden
+    private float groundY = 350; // 350 perfekt auf dem Boden
     private Texture2D texture;
     private Vector2 position;
     private Vector2 velocity;
@@ -13,60 +13,54 @@ public class Character
     private float moveSpeed = 1.0f;
     private float gravity = 0.5f;
 
-
     private bool isOnGround = true;
 
     public Character(Texture2D characterTexture, Vector2 initialPosition)
     {
-        texture = characterTexture;
-        position = initialPosition;
+        this.texture = characterTexture;
+        this.position = initialPosition;
     }
 
-    //Konstruktor damit die Figur erstellt werden kann
+    // Konstruktor damit die Figur erstellt werden kann
     public Character(GraphicsDevice graphicsDevice)
     {
         this.graphicsDevice = graphicsDevice;
     }
 
-
-
     public void LoadContent(ContentManager content)
     {
-        texture = content.Load<Texture2D>("mainCharacter");
+        this.texture = content.Load<Texture2D>("mainCharacter");
 
-
-        position.X = 30;
-        position.Y = graphicsDevice.Viewport.Height - texture.Height ; 
+        this.position.X = 30;
+        this.position.Y = this.graphicsDevice.Viewport.Height - this.texture.Height;
     }
 
-
-
-        public void Jump()
+    public void Jump()
     {
-        if (isOnGround)
+        if (this.isOnGround)
         {
-            velocity.Y = jumpStrength;
-            isOnGround = false;
+            this.velocity.Y = this.jumpStrength;
+            this.isOnGround = false;
         }
     }
 
     public void Update()
     {
-        if (!isOnGround)
+        if (!this.isOnGround)
         {
-            velocity.Y += gravity;
+            this.velocity.Y += this.gravity;
         }
 
-        if (position.Y >= groundY)
+        if (this.position.Y >= this.groundY)
         {
-            position.Y = groundY;
-            isOnGround = true;
-            velocity.Y = 0;
+            this.position.Y = this.groundY;
+            this.isOnGround = true;
+            this.velocity.Y = 0;
         }
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(texture, position, Color.White);
+        spriteBatch.Draw(this.texture, this.position, Color.White);
     }
 }

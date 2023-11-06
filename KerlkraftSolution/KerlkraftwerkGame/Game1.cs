@@ -13,14 +13,12 @@ namespace KerlkraftwerkGame
         private int screenHeight = 720;
         private float scale = 0.5f;
 
-
         public Game1()
         {
             this.graphics = new GraphicsDeviceManager(this);
             this.Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
-
-    }
+        }
 
         protected override void Initialize()
         {
@@ -33,9 +31,8 @@ namespace KerlkraftwerkGame
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
             // Erstelle die Figur
-            character = new Character(this.GraphicsDevice);
-            character.LoadContent(Content);
-
+            this.character = new Character(this.GraphicsDevice);
+            this.character.LoadContent(this.Content);
         }
 
         protected override void Update(GameTime gameTime)
@@ -47,17 +44,14 @@ namespace KerlkraftwerkGame
                 this.Exit();
             }
 
-            //Je nachdem welche Taste gedrückt, wird hier eine entsprechende Reaktion gezeigt
-          
-            //if (state.IsKeyDown(Keys.Up))
-            //{
+            // Je nachdem welche Taste gedrückt, wird hier eine entsprechende Reaktion gezeigt
+            // if (state.IsKeyDown(Keys.Up))
+            // {
              //   moveDirection.Y -= 1;
-            //}
-
-
+            // }
 
             // Aktualisiere die Character-Klasse
-            character.Update();
+            this.character.Update();
 
             // TODO: Add your update logic here
             base.Update(gameTime);
@@ -66,21 +60,20 @@ namespace KerlkraftwerkGame
         protected override void Draw(GameTime gameTime)
         {
             this.GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
+            this.spriteBatch.Begin();
 
-            //Lade und zeichne den Hintergrund
-            Texture2D backgroundTexture = Content.Load<Texture2D>("background");
+            // Lade und zeichne den Hintergrund
+            Texture2D backgroundTexture = this.Content.Load<Texture2D>("background");
 
-            //Hintergrund auf Bildschirmgröße angepasst
-            Rectangle destRect = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-            spriteBatch.Draw(backgroundTexture, destRect, Color.White);
+            // Hintergrund auf Bildschirmgröße angepasst
+            Rectangle destRect = new Rectangle(0, 0, this.GraphicsDevice.Viewport.Width, this.GraphicsDevice.Viewport.Height);
+            this.spriteBatch.Draw(backgroundTexture, destRect, Color.White);
 
-            //Figur zeichnen
-            character.Draw(spriteBatch);
+            // Figur zeichnen
+            this.character.Draw(this.spriteBatch);
 
-            //Zeichnen beenden
-            spriteBatch.End();
-
+            // Zeichnen beenden
+            this.spriteBatch.End();
 
             // TODO: Add your drawing code here
             base.Draw(gameTime);
