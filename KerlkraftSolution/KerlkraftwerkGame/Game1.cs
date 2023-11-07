@@ -6,12 +6,8 @@ namespace KerlkraftwerkGame
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
-        private Character character;
-        private int screenWidth = 1280;
-        private int screenHeight = 720;
-        private float scale = 0.5f;
+        private readonly GraphicsDeviceManager _graphics;
+
 
         public Game1()
         {
@@ -43,12 +39,6 @@ namespace KerlkraftwerkGame
             {
                 this.Exit();
             }
-
-            // Je nachdem welche Taste gedrückt, wird hier eine entsprechende Reaktion gezeigt
-            // if (state.IsKeyDown(Keys.Up))
-            // {
-             //   moveDirection.Y -= 1;
-            // }
 
             // Aktualisiere die Character-Klasse
             this.character.Update();

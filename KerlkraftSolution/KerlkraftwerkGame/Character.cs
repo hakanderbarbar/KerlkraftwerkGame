@@ -1,66 +1,65 @@
+using KerlkraftwerkGame.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-public class Character
+namespace KerlkraftwerkGame
 {
-    private GraphicsDevice graphicsDevice;
-    private float groundY = 350; // 350 perfekt auf dem Boden
-    private Texture2D texture;
-    private Vector2 position;
-    private Vector2 velocity;
-    private float jumpStrength = -10f;
-    private float moveSpeed = 1.0f;
-    private float gravity = 0.5f;
 
-    private bool isOnGround = true;
 
-    public Character(Texture2D characterTexture, Vector2 initialPosition)
+
+    public class Character
     {
-        this.texture = characterTexture;
-        this.position = initialPosition;
-    }
+        private GraphicsDevice graphicsDevice;
+        private float groundY = 350; // 350 perfekt auf dem Boden
+        private Texture2D texture;
+        private Vector2 position;
 
-    // Konstruktor damit die Figur erstellt werden kann
-    public Character(GraphicsDevice graphicsDevice)
-    {
-        this.graphicsDevice = graphicsDevice;
-    }
+        private Vector2 velocity;
+        private float JUMP = 1500f;
+        private float SPEED = 750f;
+        private float GRAVITY = 5000f;
+        private bool isOnGround = true;
 
-    public void LoadContent(ContentManager content)
-    {
-        this.texture = content.Load<Texture2D>("mainCharacter");
-
-        this.position.X = 30;
-        this.position.Y = this.graphicsDevice.Viewport.Height - this.texture.Height;
-    }
-
-    public void Jump()
-    {
-        if (this.isOnGround)
+        public Character(GraphicsDevice graphicsDevice) //Texture2D characterTexture, Vector2 initialPosition,
         {
-            this.velocity.Y = this.jumpStrength;
-            this.isOnGround = false;
-        }
-    }
-
-    public void Update()
-    {
-        if (!this.isOnGround)
-        {
-            this.velocity.Y += this.gravity;
+            //this.texture = characterTexture;
+            //this.position = initialPosition;
+            this.graphicsDevice = graphicsDevice;
         }
 
-        if (this.position.Y >= this.groundY)
+        public void LoadContent(ContentManager content)
         {
-            this.position.Y = this.groundY;
-            this.isOnGround = true;
-            this.velocity.Y = 0;
-        }
-    }
+            this.texture = content.Load<Texture2D>("mainCharacter");
 
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        spriteBatch.Draw(this.texture, this.position, Color.White);
+            this.position.X = 30;
+            this.position.Y = this.graphicsDevice.Viewport.Height - this.texture.Height;
+        }
+
+        private void UpdateVelocity()
+        {
+            var keyboardState = Keyboard.GetState();
+
+            if (!isOnGround) velocity.Y += GRAVITY * Globals.Time;
+
+            if (keyboardState.IsKeyDown(Keys.Up) && isOnGround)
+            {
+                this.velocity.Y = -JUMP;
+                this.isOnGround = false;
+            }
+        }
+
+
+        public void Update()
+        {
+            UpdateVelocity();
+            position += velocity * Globals.Time;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(this.texture, this.position, Color.White);
+        }
     }
 }
