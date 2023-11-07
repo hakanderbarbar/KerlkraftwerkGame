@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using KerlkraftwerkGame.Content;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,7 +7,8 @@ namespace KerlkraftwerkGame
 {
     public class Game1 : Game
     {
-        private readonly GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager graphics;
+        private GameManager gameManager;
 
 
         public Game1()
@@ -18,17 +20,20 @@ namespace KerlkraftwerkGame
 
         protected override void Initialize()
         {
+            graphics.PreferredBackBufferWidth = Globals.WindowSize.X;
+            graphics.PreferredBackBufferHeight = Globals.WindowSize.Y;
             this.graphics.ApplyChanges();
+
+            Globals.Content = Content;
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
+            Globals.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
+            Globals.GraphicsDevice = GraphicsDevice;
 
-            // Erstelle die Figur
-            this.character = new Character(this.GraphicsDevice);
-            this.character.LoadContent(this.Content);
+            gameManager = new();
         }
 
         protected override void Update(GameTime gameTime)
@@ -40,32 +45,25 @@ namespace KerlkraftwerkGame
                 this.Exit();
             }
 
-            // Aktualisiere die Character-Klasse
-            this.character.Update();
+            Globals.Update(gameTime);
+            gameManager.Update();
 
-            // TODO: Add your update logic here
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             this.GraphicsDevice.Clear(Color.CornflowerBlue);
-            this.spriteBatch.Begin();
 
             // Lade und zeichne den Hintergrund
             Texture2D backgroundTexture = this.Content.Load<Texture2D>("background");
 
             // Hintergrund auf Bildschirmgröße angepasst
             Rectangle destRect = new Rectangle(0, 0, this.GraphicsDevice.Viewport.Width, this.GraphicsDevice.Viewport.Height);
-            this.spriteBatch.Draw(backgroundTexture, destRect, Color.White);
+            Globals.SpriteBatch.Draw(backgroundTexture, destRect, Color.White);
 
-            // Figur zeichnen
-            this.character.Draw(this.spriteBatch);
+            gameManager.Draw();
 
-            // Zeichnen beenden
-            this.spriteBatch.End();
-
-            // TODO: Add your drawing code here
             base.Draw(gameTime);
         }
     }
