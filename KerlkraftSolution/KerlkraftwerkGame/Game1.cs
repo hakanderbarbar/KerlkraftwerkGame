@@ -14,7 +14,7 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        Globals.WindowSize = new(Map.Tiles.GetLength(1) * Map.tilesize, Map.Tiles.GetLength(0) * Map.tilesize);
+        Globals.WindowSize = new (Map.Tiles.GetLength(1) * Map.Tilesize, Map.Tiles.GetLength(0) * Map.Tilesize);
         this.graphics.PreferredBackBufferWidth = Globals.WindowSize.X;
         this.graphics.PreferredBackBufferHeight = Globals.WindowSize.Y;
         this.graphics.ApplyChanges();
@@ -34,7 +34,9 @@ public class Game1 : Game
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+        {
+            this.Exit();
+        }
 
         Globals.Update(gameTime);
         this.gameManager.Update();

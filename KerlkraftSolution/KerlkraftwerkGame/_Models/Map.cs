@@ -5,16 +5,17 @@ namespace KerlkraftwerkGame;
 
 public class Map
 {
-    public static readonly int tilesize = 128;
-    public static readonly int[,] Tiles = {
-        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 0, 2, 2, 0, 1},
-        {1, 0, 0, 2, 0, 0, 0, 0, 0, 1},
-        {1, 0, 0, 0, 0, 2, 2, 2, 0, 1},
-        {1, 0, 0, 2, 2, 1, 1, 1, 2, 1},
-        {1, 2, 2, 1, 1, 1, 1, 1, 1, 1},
+    public static readonly int Tilesize = 128;
+    public static readonly int[,] Tiles =
+    {
+        { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 0, 0, 0, 0, 0, 2, 2, 0, 1 },
+        { 1, 0, 0, 2, 0, 0, 0, 0, 0, 1 },
+        { 1, 0, 0, 0, 0, 2, 2, 2, 0, 1 },
+        { 1, 0, 0, 2, 2, 1, 1, 1, 2, 1 },
+        { 1, 2, 2, 1, 1, 1, 1, 1, 1, 1 },
     };
 
     private readonly RenderTarget2D target;
@@ -23,12 +24,11 @@ public class Map
 
     public Map()
     {
-        this.target = new (Globals.GraphicsDevice, Tiles.GetLength(1) * tilesize, Tiles.GetLength(0) * tilesize);
+        this.target = new (Globals.GraphicsDevice, Tiles.GetLength(1) * Tilesize, Tiles.GetLength(0) * Tilesize);
 
-        //Auf tile1 und 2 kann nicht zugegriffen werden, da es keine .xnb Dateien gibt im Content/bin/DesktopGL/Content Ordner
-
-        var tile1tex = Globals.Content.Load<Texture2D>("tile1"); //Hier muss tile1 statt obstacle stehen
-        var tile2tex = Globals.Content.Load<Texture2D>("tile2"); //Hier muss tile2 statt obstacle stehen
+        // Auf tile1 und 2 kann nicht zugegriffen werden, da es keine .xnb Dateien gibt im Content/bin/DesktopGL/Content Ordner
+        var tile1tex = Globals.Content.Load<Texture2D>("tile1"); // Hier muss tile1 statt obstacle stehen
+        var tile2tex = Globals.Content.Load<Texture2D>("tile2"); // Hier muss tile2 statt obstacle stehen
 
         Globals.GraphicsDevice.SetRenderTarget(this.target);
         Globals.GraphicsDevice.Clear(Color.Transparent);
@@ -38,11 +38,15 @@ public class Map
         {
             for (int y = 0; y < Tiles.GetLength(1); y++)
             {
-                if (Tiles[x, y] == 0) continue;
-                var posX = y * tilesize;
-                var posY = x * tilesize;
+                if (Tiles[x, y] == 0)
+                {
+                    continue;
+                }
+
+                var posX = y * Tilesize;
+                var posY = x * Tilesize;
                 var tex = Tiles[x, y] == 1 ? tile1tex : tile2tex;
-                Colliders[x, y] = new(posX, posY, tilesize, tilesize);
+                Colliders[x, y] = new (posX, posY, Tilesize, Tilesize);
 
                 Globals.SpriteBatch.Draw(tex, new Vector2(posX, posY), Color.White);
             }
@@ -54,10 +58,10 @@ public class Map
 
     public static List<Rectangle> GetNearestColliders(Rectangle bounds)
     {
-        int leftTile = (int)Math.Floor((float)bounds.Left / tilesize);
-        int rightTile = (int)Math.Ceiling((float)bounds.Right / tilesize) - 1;
-        int topTile = (int)Math.Floor((float)bounds.Top / tilesize);
-        int bottomTile = (int)Math.Ceiling((float)bounds.Bottom / tilesize) - 1;
+        int leftTile = (int)Math.Floor((float)bounds.Left / Tilesize);
+        int rightTile = (int)Math.Ceiling((float)bounds.Right / Tilesize) - 1;
+        int topTile = (int)Math.Floor((float)bounds.Top / Tilesize);
+        int bottomTile = (int)Math.Ceiling((float)bounds.Bottom / Tilesize) - 1;
 
         leftTile = MathHelper.Clamp(leftTile, 0, Tiles.GetLength(1));
         rightTile = MathHelper.Clamp(rightTile, 0, Tiles.GetLength(1));
@@ -70,7 +74,10 @@ public class Map
         {
             for (int y = leftTile; y <= rightTile; y++)
             {
-                if (Tiles[x, y] != 0) result.Add(Colliders[x, y]);
+                if (Tiles[x, y] != 0)
+                {
+                    result.Add(Colliders[x, y]);
+                }
             }
         }
 

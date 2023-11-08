@@ -11,7 +11,7 @@ namespace MyTestProject
         {
             Calc c = new Calc();
 
-            int result = c.Diff(2, 1);
+            int result = Calc.Diff(2, 1);
 
             Assert.AreEqual(1, result);
         }

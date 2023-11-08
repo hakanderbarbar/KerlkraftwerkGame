@@ -8,7 +8,7 @@ namespace KerlkraftwerkGame
 {
     public class Calc
     {
-        public int Diff(int x, int y)
+        public static int Diff(int x, int y)
         {
             if (x >= y)
             {

@@ -3,16 +3,17 @@
 public class Sprite
 {
     public Texture2D Texture { get; }
-    public Vector2 position;
+
+    public Vector2 Position;
 
     public Sprite(Texture2D texture, Vector2 position)
     {
-        Texture = texture;
-        this.position = position;
+        this.Texture = texture;
+        this.Position = position;
     }
 
     public void Draw()
     {
-        Globals.SpriteBatch.Draw(Texture, position, Color.White);
+        Globals.SpriteBatch.Draw(this.Texture, this.Position, Color.White);
     }
 }

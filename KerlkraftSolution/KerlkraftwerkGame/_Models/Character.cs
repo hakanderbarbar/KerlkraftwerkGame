@@ -25,9 +25,18 @@ public class Character : Sprite
     {
         var keyboardState = Keyboard.GetState();
 
-        if (keyboardState.IsKeyDown(Keys.A)) this.velocity.X = -SPEED;
-        else if (keyboardState.IsKeyDown(Keys.D)) this.velocity.X = SPEED;
-        else this.velocity.X = 0;
+        if (keyboardState.IsKeyDown(Keys.A))
+        {
+            this.velocity.X = -SPEED;
+        }
+        else if (keyboardState.IsKeyDown(Keys.D))
+        {
+            this.velocity.X = SPEED;
+        }
+        else
+        {
+            this.velocity.X = 0;
+        }
 
         this.velocity.Y += GRAVITY * Globals.Time;
 
@@ -40,23 +49,30 @@ public class Character : Sprite
     private void UpdatePosition()
     {
         this.onGround = false;
-        var newPos = this.position + (this.velocity * Globals.Time);
+        var newPos = this.Position + (this.velocity * Globals.Time);
         Rectangle newRect = this.CalculateBounds(newPos);
 
         foreach (var collider in Map.GetNearestColliders(newRect))
         {
-            if (newPos.X != this.position.X)
+            if (newPos.X != this.Position.X)
             {
-                newRect = this.CalculateBounds(new(newPos.X, this.position.Y));
+                newRect = this.CalculateBounds(new (newPos.X, this.Position.Y));
                 if (newRect.Intersects(collider))
                 {
-                    if (newPos.X > this.position.X) newPos.X = collider.Left - this.Texture.Width + OFFSET;
-                    else newPos.X = collider.Right - OFFSET;
+                    if (newPos.X > this.Position.X)
+                    {
+                        newPos.X = collider.Left - this.Texture.Width + OFFSET;
+                    }
+                    else
+                    {
+                        newPos.X = collider.Right - OFFSET;
+                    }
+
                     continue;
                 }
             }
 
-            newRect = this.CalculateBounds(new(this.position.X, newPos.Y));
+            newRect = this.CalculateBounds(new (this.Position.X, newPos.Y));
             if (newRect.Intersects(collider))
             {
                 if (this.velocity.Y > 0)
@@ -73,7 +89,7 @@ public class Character : Sprite
             }
         }
 
-        this.position = newPos;
+        this.Position = newPos;
     }
 
     public void Update()
