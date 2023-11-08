@@ -27,8 +27,8 @@ public class Map
 
         //Auf tile1 und 2 kann nicht zugegriffen werden, da es keine .xnb Dateien gibt im Content/bin/DesktopGL/Content Ordner
 
-        var tile1tex = Globals.Content.Load<Texture2D>("obstacle"); //Hier muss tile1 statt obstacle stehen
-        var tile2tex = Globals.Content.Load<Texture2D>("obstacle"); //Hier muss tile2 statt obstacle stehen
+        var tile1tex = Globals.Content.Load<Texture2D>("tile1"); //Hier muss tile1 statt obstacle stehen
+        var tile2tex = Globals.Content.Load<Texture2D>("tile2"); //Hier muss tile2 statt obstacle stehen
 
         Globals.GraphicsDevice.SetRenderTarget(this.target);
         Globals.GraphicsDevice.Clear(Color.Transparent);
