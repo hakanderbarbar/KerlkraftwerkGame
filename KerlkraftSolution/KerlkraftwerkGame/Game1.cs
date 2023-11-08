@@ -1,70 +1,53 @@
-﻿using KerlkraftwerkGame.Content;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+﻿namespace KerlkraftwerkGame;
 
-namespace KerlkraftwerkGame
+public class Game1 : Game
 {
-    public class Game1 : Game
+    private readonly GraphicsDeviceManager graphics;
+    private GameManager gameManager;
+
+    public Game1()
     {
-        private readonly GraphicsDeviceManager graphics;
-        private GameManager gameManager;
+        this.graphics = new GraphicsDeviceManager(this);
+        this.Content.RootDirectory = "Content";
+        this.IsMouseVisible = true;
+    }
 
+    protected override void Initialize()
+    {
+        Globals.WindowSize = new(Map.Tiles.GetLength(1) * Map.tilesize, Map.Tiles.GetLength(0) * Map.tilesize);
+        this.graphics.PreferredBackBufferWidth = Globals.WindowSize.X;
+        this.graphics.PreferredBackBufferHeight = Globals.WindowSize.Y;
+        this.graphics.ApplyChanges();
 
-        public Game1()
-        {
-            this.graphics = new GraphicsDeviceManager(this);
-            this.Content.RootDirectory = "Content";
-            this.IsMouseVisible = true;
-        }
+        Globals.Content = this.Content;
+        base.Initialize();
+    }
 
-        protected override void Initialize()
-        {
-            graphics.PreferredBackBufferWidth = Globals.WindowSize.X;
-            graphics.PreferredBackBufferHeight = Globals.WindowSize.Y;
-            this.graphics.ApplyChanges();
+    protected override void LoadContent()
+    {
+        Globals.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
+        Globals.GraphicsDevice = this.GraphicsDevice;
 
-            Globals.Content = Content;
-            base.Initialize();
-        }
+        this.gameManager = new ();
+    }
 
-        protected override void LoadContent()
-        {
-            Globals.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
-            Globals.GraphicsDevice = GraphicsDevice;
+    protected override void Update(GameTime gameTime)
+    {
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            Exit();
 
-            gameManager = new();
-        }
+        Globals.Update(gameTime);
+        this.gameManager.Update();
 
-        protected override void Update(GameTime gameTime)
-        {
-            KeyboardState state = Keyboard.GetState();
+        base.Update(gameTime);
+    }
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                this.Exit();
-            }
+    protected override void Draw(GameTime gameTime)
+    {
+        this.GraphicsDevice.Clear(Color.SkyBlue);
 
-            Globals.Update(gameTime);
-            gameManager.Update();
+        this.gameManager.Draw();
 
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            this.GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // Lade und zeichne den Hintergrund
-            Texture2D backgroundTexture = this.Content.Load<Texture2D>("background");
-
-            // Hintergrund auf Bildschirmgröße angepasst
-            Rectangle destRect = new Rectangle(0, 0, this.GraphicsDevice.Viewport.Width, this.GraphicsDevice.Viewport.Height);
-            Globals.SpriteBatch.Draw(backgroundTexture, destRect, Color.White);
-
-            gameManager.Draw();
-
-            base.Draw(gameTime);
-        }
+        base.Draw(gameTime);
     }
 }

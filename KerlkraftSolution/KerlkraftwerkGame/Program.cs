@@ -1,8 +1,13 @@
-﻿internal class Program
+﻿using System;
+
+namespace KerlkraftwerkGame;
+
+public static class Program
 {
-    private static void Main(string[] args)
+    [STAThread]
+    private static void Main()
     {
-        using var game = new KerlkraftwerkGame.Game1();
+        using var game = new Game1();
         game.Run();
     }
 }

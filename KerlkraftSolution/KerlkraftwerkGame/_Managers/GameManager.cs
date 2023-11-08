@@ -1,31 +1,26 @@
-﻿using KerlkraftwerkGame.Content;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace KerlkraftwerkGame;
 
-namespace KerlkraftwerkGame;
 public class GameManager
 {
-    
+    private readonly Map map;
     private readonly Character character;
 
     public GameManager()
     {
-        
-        this.character = new(Globals.Content.Load<Texture2D>("hero"), new(Globals.WindowSize.X / 2, 200));
+        this.map = new ();
+        this.character = new (Globals.Content.Load<Texture2D>("mainCharacter"), new(Globals.WindowSize.X / 2, 200));
     }
 
     public void Update()
     {
-        character.Update();
+        this.character.Update();
     }
 
     public void Draw()
     {
         Globals.SpriteBatch.Begin();
-        character.Draw();
+        this.map.Draw();
+        this.character.Draw();
         Globals.SpriteBatch.End();
     }
+}
