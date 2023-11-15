@@ -16,6 +16,12 @@ public class Character : Sprite
     {
     }
 
+    public void Update()
+    {
+        this.UpdateVelocity();
+        this.UpdatePosition();
+    }
+
     private Rectangle CalculateBounds(Vector2 pos)
     {
         return new ((int)pos.X + OFFSET, (int)pos.Y, this.Texture.Width - (2 * OFFSET), this.Texture.Height);
@@ -90,11 +96,5 @@ public class Character : Sprite
         }
 
         this.Position = newPos;
-    }
-
-    public void Update()
-    {
-        this.UpdateVelocity();
-        this.UpdatePosition();
     }
 }

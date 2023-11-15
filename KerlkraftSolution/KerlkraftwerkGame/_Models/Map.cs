@@ -20,15 +20,12 @@ public class Map
 
     private readonly RenderTarget2D target;
 
-    private static Rectangle[,] Colliders { get; } = new Rectangle[Tiles.GetLength(0), Tiles.GetLength(1)];
-
     public Map()
     {
         this.target = new (Globals.GraphicsDevice, Tiles.GetLength(1) * Tilesize, Tiles.GetLength(0) * Tilesize);
 
-        // Auf tile1 und 2 kann nicht zugegriffen werden, da es keine .xnb Dateien gibt im Content/bin/DesktopGL/Content Ordner
-        var tile1tex = Globals.Content.Load<Texture2D>("tile1"); // Hier muss tile1 statt obstacle stehen
-        var tile2tex = Globals.Content.Load<Texture2D>("tile2"); // Hier muss tile2 statt obstacle stehen
+        var tile1tex = Globals.Content.Load<Texture2D>("tile1");
+        var tile2tex = Globals.Content.Load<Texture2D>("tile2");
 
         Globals.GraphicsDevice.SetRenderTarget(this.target);
         Globals.GraphicsDevice.Clear(Color.Transparent);
@@ -55,6 +52,8 @@ public class Map
         Globals.SpriteBatch.End();
         Globals.GraphicsDevice.SetRenderTarget(null);
     }
+
+    private static Rectangle[,] Colliders { get; } = new Rectangle[Tiles.GetLength(0), Tiles.GetLength(1)];
 
     public static List<Rectangle> GetNearestColliders(Rectangle bounds)
     {
