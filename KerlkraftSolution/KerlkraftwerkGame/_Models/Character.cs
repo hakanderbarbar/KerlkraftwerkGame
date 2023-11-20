@@ -1,5 +1,5 @@
 using KerlkraftwerkGame;
-//using KerlkraftwerkGame._Managers;
+using KerlkraftwerkGame._Managers;
 
 namespace KerlkraftwerkGame;
 
@@ -12,12 +12,12 @@ public class Character : Sprite
     private Vector2 velocity;
     private bool onGround;
 
-    //private readonly Animation _anim;
+    private readonly Animation _anim;
 
     public Character(Texture2D texture, Vector2 position)
         : base(texture, position)
     {
-        //_anim = new(texture, 6, 0.1f);
+        _anim = new(texture, 6, 0.1f);
     }
 
     public void Update()
@@ -28,7 +28,7 @@ public class Character : Sprite
 
     private Rectangle CalculateBounds(Vector2 pos)
     {
-        return new ((int)pos.X + OFFSET, (int)pos.Y, this.Texture.Width - (2 * OFFSET), this.Texture.Height);
+        return new((int)pos.X + OFFSET, (int)pos.Y, this.Texture.Width - (2 * OFFSET), this.Texture.Height);
     }
 
     private void UpdateVelocity()
@@ -66,7 +66,7 @@ public class Character : Sprite
         {
             if (newPos.X != this.Position.X)
             {
-                newRect = this.CalculateBounds(new (newPos.X, this.Position.Y));
+                newRect = this.CalculateBounds(new(newPos.X, this.Position.Y));
                 if (newRect.Intersects(collider))
                 {
                     if (newPos.X > this.Position.X)
@@ -82,7 +82,7 @@ public class Character : Sprite
                 }
             }
 
-            newRect = this.CalculateBounds(new (this.Position.X, newPos.Y));
+            newRect = this.CalculateBounds(new(this.Position.X, newPos.Y));
             if (newRect.Intersects(collider))
             {
                 if (this.velocity.Y > 0)
@@ -104,12 +104,12 @@ public class Character : Sprite
 
     public void Update()
     {
-        //_anim.Update();
+        _anim.Update();
         this.UpdateVelocity();
         this.UpdatePosition();
     }
-    //public void Draw()
-    //{
-    //    _anim.Draw(this.Position);
-    //}
+    public void Draw()
+    {
+        _anim.Draw(this.Position);
+    }
 }
