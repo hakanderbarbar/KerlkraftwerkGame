@@ -20,6 +20,12 @@ public class Character : Sprite
         //_anim = new(texture, 6, 0.1f);
     }
 
+    public void Update()
+    {
+        this.UpdateVelocity();
+        this.UpdatePosition();
+    }
+
     private Rectangle CalculateBounds(Vector2 pos)
     {
         return new ((int)pos.X + OFFSET, (int)pos.Y, this.Texture.Width - (2 * OFFSET), this.Texture.Height);
