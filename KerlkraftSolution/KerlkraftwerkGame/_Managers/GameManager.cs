@@ -8,12 +8,12 @@ public class GameManager
     public GameManager()
     {
         this.map = new ();
-        this.character = new (Globals.Content.Load<Texture2D>("mainCharacter"), new(Globals.WindowSize.X / 2, 200));
+        this.character = new (Globals.Content.Load<Texture2D>("Run"), new (Globals.WindowSize.X / 2, 200));
     }
 
     public void Update()
     {
-        this.character.Update();
+        character.Update();
     }
 
     public void Draw()

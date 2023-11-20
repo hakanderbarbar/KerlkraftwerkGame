@@ -6,6 +6,8 @@ public static class Globals
 {
     public static float Time { get; set; }
 
+    //public static float TotalSeconds { get; set; }
+
     public static ContentManager Content { get; set; }
 
     public static SpriteBatch SpriteBatch { get; set; }

@@ -1,4 +1,5 @@
 using KerlkraftwerkGame;
+//using KerlkraftwerkGame._Managers;
 
 namespace KerlkraftwerkGame;
 
@@ -11,9 +12,12 @@ public class Character : Sprite
     private Vector2 velocity;
     private bool onGround;
 
+    //private readonly Animation _anim;
+
     public Character(Texture2D texture, Vector2 position)
         : base(texture, position)
     {
+        //_anim = new(texture, 6, 0.1f);
     }
 
     private Rectangle CalculateBounds(Vector2 pos)
@@ -94,7 +98,12 @@ public class Character : Sprite
 
     public void Update()
     {
+        //_anim.Update();
         this.UpdateVelocity();
         this.UpdatePosition();
     }
+    //public void Draw()
+    //{
+    //    _anim.Draw(this.Position);
+    //}
 }
