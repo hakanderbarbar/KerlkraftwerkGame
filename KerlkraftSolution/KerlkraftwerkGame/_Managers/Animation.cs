@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KerlkraftwerkGame._Managers
+namespace KerlkraftwerkGame.Managers
 {
     public class Animation
     {
