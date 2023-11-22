@@ -18,54 +18,54 @@ namespace KerlkraftwerkGame.Managers
 
         public Animation(Texture2D texture, int framesX, float frameTime)
         {
-            aTexture = texture;
-            aFrameTime = frameTime;
-            aFrameTimeLeft = aFrameTime;
-            aFrames = framesX;
-            var frameWidth = aTexture.Width / framesX;
-            var frameHeight = aTexture.Height;
+            this.aTexture = texture;
+            this.aFrameTime = frameTime;
+            this.aFrameTimeLeft = this.aFrameTime;
+            this.aFrames = framesX;
+            var frameWidth = this.aTexture.Width / framesX;
+            var frameHeight = this.aTexture.Height;
 
-            for (int i = 0; i < aFrames; i++)
+            for (int i = 0; i < this.aFrames; i++)
             {
-                aSourceRectangles.Add(new (i * frameWidth, 0, frameWidth, frameHeight));
+                this.aSourceRectangles.Add(new (i * frameWidth, 0, frameWidth, frameHeight));
             }
         }
 
         public void Start()
         {
-            aActive = true;
+            this.aActive = true;
         }
 
         public void Stop()
         {
-            aActive = false;
+            this.aActive = false;
         }
 
         public void Reset()
         {
-            aFrame = 0;
-            aFrameTimeLeft = aFrameTime;
+            this.aFrame = 0;
+            this.aFrameTimeLeft = this.aFrameTime;
         }
 
         public void Update()
         {
-            if (!aActive)
+            if (!this.aActive)
             {
                 return;
             }
 
-            aFrameTimeLeft -= Globals.TotalSeconds;
+            this.aFrameTimeLeft -= Globals.TotalSeconds;
 
-            if (aFrameTime <= 0)
+            if (this.aFrameTime <= 0)
             {
-                aFrameTimeLeft += aFrameTime;
-                aFrame = (aFrame + 1) % aFrames;
+                this.aFrameTimeLeft += this.aFrameTime;
+                this.aFrame = (this.aFrame + 1) % this.aFrames;
             }
         }
 
         public void Draw(Vector2 pos)
         {
-            Globals.SpriteBatch.Draw(aTexture, pos, aSourceRectangles[aFrame], Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 1);
+            Globals.SpriteBatch.Draw(this.aTexture, pos, this.aSourceRectangles[this.aFrame], Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 1);
         }
     }
 }

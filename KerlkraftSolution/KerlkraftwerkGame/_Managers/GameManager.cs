@@ -13,7 +13,7 @@ public class GameManager
 
     public void Update()
     {
-        character.Update();
+        this.character.Update();
     }
 
     public void Draw()

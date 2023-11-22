@@ -16,19 +16,19 @@ public class Character : Sprite
     public Character(Texture2D texture, Vector2 position)
         : base(texture, position)
     {
-        anim = new (texture, 6, 0.1f);
+        this.anim = new (texture, 6, 0.1f);
     }
 
     public void Update()
     {
-        anim.Update();
+        this.anim.Update();
         this.UpdateVelocity();
         this.UpdatePosition();
     }
 
     public new void Draw()
     {
-        anim.Draw(this.Position);
+        this.anim.Draw(this.Position);
     }
 
     private Rectangle CalculateBounds(Vector2 pos)
