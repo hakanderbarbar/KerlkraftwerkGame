@@ -1,4 +1,5 @@
 using KerlkraftwerkGame;
+using KerlkraftwerkGame.Global;
 using KerlkraftwerkGame.Managers;
 
 namespace KerlkraftwerkGame;

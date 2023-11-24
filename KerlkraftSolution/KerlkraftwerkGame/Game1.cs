@@ -1,4 +1,6 @@
-﻿namespace KerlkraftwerkGame;
+﻿using KerlkraftwerkGame.Global;
+
+namespace KerlkraftwerkGame;
 
 public class Game1 : Game
 {
