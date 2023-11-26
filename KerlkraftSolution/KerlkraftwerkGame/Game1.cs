@@ -1,57 +1,67 @@
-﻿using KerlkraftwerkGame.Global;
-
-namespace KerlkraftwerkGame;
+﻿using System;
 
 public class Game1 : Game
 {
-    private readonly GraphicsDeviceManager graphics;
-    private GameManager gameManager;
+    GraphicsDeviceManager graphics;
+    SpriteBatch spriteBatch;
+    Texture2D backgroundTexture;
+    Character mainCharacter;
+    InputController inputController;
 
     public Game1()
     {
-        this.graphics = new GraphicsDeviceManager(this);
-        this.Content.RootDirectory = "Content";
-        this.IsMouseVisible = true;
-    }
-
-    protected override void Initialize()
-    {
-        Globals.WindowSize = new (Map.Tiles.GetLength(1) * Map.Tilesize, Map.Tiles.GetLength(0) * Map.Tilesize);
-        this.graphics.PreferredBackBufferWidth = Globals.WindowSize.X;
-        this.graphics.PreferredBackBufferHeight = Globals.WindowSize.Y;
-        this.graphics.ApplyChanges();
-
-        Globals.Content = this.Content;
-        base.Initialize();
+        graphics = new GraphicsDeviceManager(this);
+        Content.RootDirectory = "Content";
+        IsMouseVisible = true;
     }
 
     protected override void LoadContent()
     {
-        Globals.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
-        Globals.GraphicsDevice = this.GraphicsDevice;
+        spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        this.gameManager = new ();
+        // Lade den Hintergrund
+        backgroundTexture = Content.Load<Texture2D>("background");
+
+        // Lade den Charakter
+        Texture2D characterTexture = Content.Load<Texture2D>("mainCharacter");
+        mainCharacter = new Character(characterTexture, new Vector2(100, 300));
+
+        // Initialisiere den InputController
+        inputController = new InputController();
     }
 
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-        {
-            this.Exit();
-        }
+            Exit();
 
-        Globals.Update(gameTime);
-        this.gameManager.Update();
+        // Aktualisiere den InputController und den Charakter
+        inputController.Update(gameTime, mainCharacter);
 
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        this.GraphicsDevice.Clear(Color.SkyBlue);
+        GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        this.gameManager.Draw();
+        spriteBatch.Begin();
+
+        // Skaliere und positioniere den Hintergrund, um ihn an den Bildschirm anzupassen
+        float scaleWidth = (float)GraphicsDevice.Viewport.Width / backgroundTexture.Width;
+        float scaleHeight = (float)GraphicsDevice.Viewport.Height / backgroundTexture.Height;
+
+        float scale = Math.Max(scaleWidth, scaleHeight); // Verwende den größten Skalierungsfaktor
+
+        spriteBatch.Draw(backgroundTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+
+        // Zeichne den Charakter
+        mainCharacter.Draw(spriteBatch);
+
+        spriteBatch.End();
 
         base.Draw(gameTime);
     }
+
+
 }

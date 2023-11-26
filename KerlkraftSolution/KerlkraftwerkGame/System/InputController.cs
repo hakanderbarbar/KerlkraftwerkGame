@@ -1,77 +1,23 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Text;
-//using TrexRunner.Entities;
 
-namespace KerlkraftwerkGame.System
+public class InputController
 {
-    public class InputController
+    private KeyboardState previousKeyboardState;
+
+    public void Update(GameTime gameTime, Character character)
     {
+        KeyboardState currentKeyboardState = Keyboard.GetState();
 
-        private bool isBlocked;
-        private character character;
+        // Der Charakter bewegt sich ständig nach vorne (Rennen)
+        character.Update(gameTime);
 
-        private KeyboardState previousKeyboardState;
-
-        public InputController(Trex character)
+        // Springen, wenn die Leertaste gedrückt wird
+        if (currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space))
         {
-            character = character;
+            character.Jump();
         }
 
-        public void ProcessControls(GameTime gameTime)
-        {
-
-            KeyboardState keyboardState = Keyboard.GetState();
-
-            if (!isBlocked)
-            {
-                bool isJumpKeyPressed = keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.Space);
-                bool wasJumpKeyPressed = previousKeyboardState.IsKeyDown(Keys.Up) || previousKeyboardState.IsKeyDown(Keys.Space);
-
-                if (!wasJumpKeyPressed && isJumpKeyPressed)
-                {
-
-                    if (character.State != TrexState.Jumping)
-                        character.BeginJump();
-
-                }
-                else if (character.State == TrexState.Jumping && !isJumpKeyPressed)
-                {
-
-                    character.CancelJump();
-
-                }
-                else if (keyboardState.IsKeyDown(Keys.Down))
-                {
-
-                    if (character.State == TrexState.Jumping || character.State == TrexState.Falling)
-                        character.Drop();
-                    else
-                        character.Duck();
-
-                }
-                else if (character.State == TrexState.Ducking && !keyboardState.IsKeyDown(Keys.Down))
-                {
-
-                    character.GetUp();
-
-                }
-
-            }
-
-            previousKeyboardState = keyboardState;
-
-            isBlocked = false;
-
-        }
-
-        public void BlockInputTemporarily()
-        {
-            isBlocked = true;
-        }
-
+        previousKeyboardState = currentKeyboardState;
     }
 }
