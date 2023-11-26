@@ -2,7 +2,6 @@
 {
     private Texture2D texture;
     private Vector2 position;
-    private float speed = 5f;
     private float jumpSpeed = -10f;  // Geschwindigkeit des Sprungs
     private bool isJumping = false;
 
@@ -14,13 +13,8 @@
 
     public void Update(GameTime gameTime)
     {
-        // Der Charakter bewegt sich ständig nach vorne
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        this.position.X += this.speed * deltaTime;
 
-        // Hier könntest du auch Kollisionsprüfungen oder andere Logik hinzufügen
-
-        // Wenn der Charakter springt, die Y-Position anpassen
         if (this.isJumping)
         {
             this.position.Y += this.jumpSpeed * deltaTime;

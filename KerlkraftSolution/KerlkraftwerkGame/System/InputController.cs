@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+namespace KerlkraftwerkGame;
+
 public class InputController
 {
     private KeyboardState previousKeyboardState;

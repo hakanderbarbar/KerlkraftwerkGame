@@ -1,67 +1,134 @@
 ﻿using System;
+using System.Collections.Generic;
+using KerlkraftwerkGame;
+using KerlkraftwerkGame.Entities;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-public class Game1 : Game
+namespace KerlkraftwerkGame
 {
-    private GraphicsDeviceManager graphics;
-    private SpriteBatch spriteBatch;
-    private Texture2D backgroundTexture;
-    private Character mainCharacter;
-    private InputController inputController;
-
-    public Game1()
+    public class Game1 : Game
     {
-        this.graphics = new GraphicsDeviceManager(this);
-        this.Content.RootDirectory = "Content";
-        this.IsMouseVisible = true;
-    }
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private Texture2D backgroundTexture;
+        private Character mainCharacter;
+        private InputController inputController;
+        private List<Obstacle> obstacles;
+        private Random random;
 
-    protected override void LoadContent()
-    {
-        this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
-
-        // Lade den Hintergrund
-        this.backgroundTexture = this.Content.Load<Texture2D>("background");
-
-        // Lade den Charakter
-        Texture2D characterTexture = this.Content.Load<Texture2D>("mainCharacter");
-        this.mainCharacter = new Character(characterTexture, new Vector2(100, 300));
-
-        // Initialisiere den InputController
-        this.inputController = new InputController();
-    }
-
-    protected override void Update(GameTime gameTime)
-    {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        public Game1()
         {
-            this.Exit();
+            this.graphics = new GraphicsDeviceManager(this);
+            this.Content.RootDirectory = "Content";
+
+            this.IsMouseVisible = true;
+            this.obstacles = new List<Obstacle>();
+            this.random = new Random();
         }
 
-        // Aktualisiere den InputController und den Charakter
-        this.inputController.Update(gameTime, this.mainCharacter);
+        protected override void LoadContent()
+        {
+            this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
-        base.Update(gameTime);
-    }
+            // Lade den Hintergrund
+            this.backgroundTexture = this.Content.Load<Texture2D>("background");
 
-    protected override void Draw(GameTime gameTime)
-    {
-        this.GraphicsDevice.Clear(Color.CornflowerBlue);
+            // Lade den Charakter
+            Texture2D characterTexture = this.Content.Load<Texture2D>("mainCharacter");
+            this.mainCharacter = new Character(characterTexture, new Vector2(100, 345));
 
-        this.spriteBatch.Begin();
+            // Initialisiere den InputController
+            this.inputController = new InputController();
+        }
 
-        // Skaliere und positioniere den Hintergrund, um ihn an den Bildschirm anzupassen
-        float scaleWidth = (float)this.GraphicsDevice.Viewport.Width / this.backgroundTexture.Width;
-        float scaleHeight = (float)this.GraphicsDevice.Viewport.Height / this.backgroundTexture.Height;
+        protected override void Update(GameTime gameTime)
+        {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
 
-        float scale = Math.Max(scaleWidth, scaleHeight); // Verwende den größten Skalierungsfaktor
+            this.inputController.Update(gameTime, this.mainCharacter);
 
-        this.spriteBatch.Draw(this.backgroundTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            // Aktualisiere die Hindernisse
+            foreach (var obstacle in this.obstacles)
+            {
+                obstacle.Update(gameTime);
 
-        // Zeichne den Charakter
-        this.mainCharacter.Draw(this.spriteBatch);
+                // Füge hier Kollisionslogik hinzu, wenn nötig
+            }
 
-        this.spriteBatch.End();
+            // Prüfe, ob ein neues Hindernis hinzugefügt werden soll
+            if (this.RandomShouldAddObstacle())
+            {
+                this.AddNewObstacle();
+            }
 
-        base.Draw(gameTime);
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            this.GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            this.spriteBatch.Begin();
+
+            this.spriteBatch.Draw(this.backgroundTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, this.CalculateBackgroundScale(), SpriteEffects.None, 0f);
+
+            this.mainCharacter.Draw(this.spriteBatch);
+
+            // Zeichne die Hindernisse
+            foreach (var obstacle in this.obstacles)
+            {
+                obstacle.Draw(this.spriteBatch);
+            }
+
+            this.spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+
+        private void AddNewObstacle()
+        {
+            // Lade die Hindernisse
+            Texture2D obstacleTexture1 = this.Content.Load<Texture2D>("tile1");
+            Texture2D obstacleTexture2 = this.Content.Load<Texture2D>("tile2");
+
+            // Erzeuge ein neues Hindernis
+            Obstacle newObstacle = new Obstacle(
+                this.GetRandomObstacleTexture(),  // Zufälliges Hindernisbild
+                new Vector2(this.GraphicsDevice.Viewport.Width, this.GetRandomObstacleYPosition()));
+
+            // Füge das Hindernis zur Liste hinzu
+            this.obstacles.Add(newObstacle);
+        }
+
+        private Texture2D GetRandomObstacleTexture()
+        {
+            // Gib zufällig "tile1" oder "tile2" zurück
+            return (this.random.Next(2) == 0) ? this.Content.Load<Texture2D>("tile1") : this.Content.Load<Texture2D>("tile2");
+        }
+
+        private int GetRandomObstacleYPosition()
+        {
+            // Gib eine zufällige Y-Position zurück (hier anpassen, je nachdem, wo du die Hindernisse haben möchtest)
+            return this.random.Next(200, this.GraphicsDevice.Viewport.Height - 200);
+        }
+
+        private bool RandomShouldAddObstacle()
+        {
+            // Zufällig entscheiden, ob ein neues Hindernis hinzugefügt werden soll
+            return this.random.Next(100) < 1; // Hier kannst du die Wahrscheinlichkeit anpassen (1% in diesem Beispiel)
+        }
+
+        private float CalculateBackgroundScale()
+        {
+            float scaleWidth = (float)this.GraphicsDevice.Viewport.Width / this.backgroundTexture.Width;
+            float scaleHeight = (float)this.GraphicsDevice.Viewport.Height / this.backgroundTexture.Height;
+
+            return Math.Max(scaleWidth, scaleHeight);
+        }
     }
 }
