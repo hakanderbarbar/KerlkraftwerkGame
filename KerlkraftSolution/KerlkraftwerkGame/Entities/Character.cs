@@ -16,29 +16,29 @@
     {
         // Der Charakter bewegt sich ständig nach vorne
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        position.X += speed * deltaTime;
+        this.position.X += this.speed * deltaTime;
 
         // Hier könntest du auch Kollisionsprüfungen oder andere Logik hinzufügen
 
         // Wenn der Charakter springt, die Y-Position anpassen
-        if (isJumping)
+        if (this.isJumping)
         {
-            position.Y += jumpSpeed * deltaTime;
-            isJumping = false;  // Reset, um mehrere aufeinanderfolgende Sprünge zu verhindern
+            this.position.Y += this.jumpSpeed * deltaTime;
+            this.isJumping = false;  // Reset, um mehrere aufeinanderfolgende Sprünge zu verhindern
         }
     }
 
     public void Jump()
     {
         // Wenn der Charakter nicht bereits springt, springen ermöglichen
-        if (!isJumping)
+        if (!this.isJumping)
         {
-            isJumping = true;
+            this.isJumping = true;
         }
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        spriteBatch.Draw(texture, position, Color.White);
+        spriteBatch.Draw(this.texture, this.position, Color.White);
     }
 }

@@ -13,11 +13,11 @@ public class InputController
         character.Update(gameTime);
 
         // Springen, wenn die Leertaste gedrückt wird
-        if (currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space))
+        if (currentKeyboardState.IsKeyDown(Keys.Space) && !this.previousKeyboardState.IsKeyDown(Keys.Space))
         {
             character.Jump();
         }
 
-        previousKeyboardState = currentKeyboardState;
+        this.previousKeyboardState = currentKeyboardState;
     }
 }

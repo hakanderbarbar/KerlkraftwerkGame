@@ -2,66 +2,66 @@
 
 public class Game1 : Game
 {
-    GraphicsDeviceManager graphics;
-    SpriteBatch spriteBatch;
-    Texture2D backgroundTexture;
-    Character mainCharacter;
-    InputController inputController;
+    private GraphicsDeviceManager graphics;
+    private SpriteBatch spriteBatch;
+    private Texture2D backgroundTexture;
+    private Character mainCharacter;
+    private InputController inputController;
 
     public Game1()
     {
-        graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
+        this.graphics = new GraphicsDeviceManager(this);
+        this.Content.RootDirectory = "Content";
+        this.IsMouseVisible = true;
     }
 
     protected override void LoadContent()
     {
-        spriteBatch = new SpriteBatch(GraphicsDevice);
+        this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
         // Lade den Hintergrund
-        backgroundTexture = Content.Load<Texture2D>("background");
+        this.backgroundTexture = this.Content.Load<Texture2D>("background");
 
         // Lade den Charakter
-        Texture2D characterTexture = Content.Load<Texture2D>("mainCharacter");
-        mainCharacter = new Character(characterTexture, new Vector2(100, 300));
+        Texture2D characterTexture = this.Content.Load<Texture2D>("mainCharacter");
+        this.mainCharacter = new Character(characterTexture, new Vector2(100, 300));
 
         // Initialisiere den InputController
-        inputController = new InputController();
+        this.inputController = new InputController();
     }
 
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+        {
+            this.Exit();
+        }
 
         // Aktualisiere den InputController und den Charakter
-        inputController.Update(gameTime, mainCharacter);
+        this.inputController.Update(gameTime, this.mainCharacter);
 
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        this.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        spriteBatch.Begin();
+        this.spriteBatch.Begin();
 
         // Skaliere und positioniere den Hintergrund, um ihn an den Bildschirm anzupassen
-        float scaleWidth = (float)GraphicsDevice.Viewport.Width / backgroundTexture.Width;
-        float scaleHeight = (float)GraphicsDevice.Viewport.Height / backgroundTexture.Height;
+        float scaleWidth = (float)this.GraphicsDevice.Viewport.Width / this.backgroundTexture.Width;
+        float scaleHeight = (float)this.GraphicsDevice.Viewport.Height / this.backgroundTexture.Height;
 
         float scale = Math.Max(scaleWidth, scaleHeight); // Verwende den größten Skalierungsfaktor
 
-        spriteBatch.Draw(backgroundTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+        this.spriteBatch.Draw(this.backgroundTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
         // Zeichne den Charakter
-        mainCharacter.Draw(spriteBatch);
+        this.mainCharacter.Draw(this.spriteBatch);
 
-        spriteBatch.End();
+        this.spriteBatch.End();
 
         base.Draw(gameTime);
     }
-
-
 }
