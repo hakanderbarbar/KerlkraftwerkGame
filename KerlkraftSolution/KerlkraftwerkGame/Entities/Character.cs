@@ -2,17 +2,22 @@
 {
     private Texture2D texture;
     private Vector2 position;
-    private float jumpSpeed = 300f;
-    private float gravity = 500f;
-    private bool isJumping = false;
-    private float jumpDuration = 0.5f;
+    private Vector2 velocity;
+    private float jumpSpeed = 650f;
+    private float gravity = 1000f;
+    private int jumpsRemaining = 2;
+    private float jumpDuration = 0.1f;
     private float jumpTimer = 0f;
-    private float groundLevel = 430f; // Startposition Character
+    private float groundLevel = 430f;
+
+    private bool isJumping = false;
+    private bool isFalling = false;
 
     public Character(Texture2D texture, Vector2 startPosition)
     {
         this.texture = texture;
         this.position = startPosition;
+        this.velocity = Vector2.Zero;
     }
 
     public void Update(GameTime gameTime)
@@ -22,35 +27,54 @@
         if (this.isJumping)
         {
             this.position.Y -= this.jumpSpeed * deltaTime;
-
-            // Aktualisiere den Sprung-Timer
             this.jumpTimer += deltaTime;
 
             if (this.jumpTimer >= this.jumpDuration)
             {
                 this.isJumping = false;
                 this.jumpTimer = 0f;
+                this.isFalling = true;
             }
         }
         else
         {
-            // Der Charakter wird durch die Gravitation nach unten gezogen
-            this.position.Y += this.gravity * deltaTime;
+            this.velocity.Y += this.gravity * deltaTime;
+            this.position += this.velocity * deltaTime;
 
-            // Kollisionsabfrage mit der festgelegten Y-Position (groundLevel)
             if (this.position.Y + this.texture.Height > this.groundLevel)
             {
                 this.position.Y = this.groundLevel - this.texture.Height;
+                this.velocity.Y = 0f;
+
+                if (this.isFalling)
+                {
+                    this.isFalling = false;
+                    this.jumpsRemaining = 2;
+                }
+            }
+            else
+            {
+                this.isFalling = true;
             }
         }
     }
 
     public void Jump()
     {
-        // Wenn der Charakter nicht bereits springt, starte den Sprung
-        if (!this.isJumping)
+        if (this.jumpsRemaining > 0 && !this.isJumping)
         {
             this.isJumping = true;
+            this.jumpsRemaining--;
+
+            // Setze die Sprunggeschwindigkeit basierend auf der Anzahl der verbleibenden Sprünge
+            if (this.jumpsRemaining == 1)
+            {
+                this.velocity.Y = -this.jumpSpeed; // First Jump
+            }
+            else if (this.jumpsRemaining == 0)
+            {
+                this.velocity.Y = -this.jumpSpeed / 2f; // Second Jump (mit halber Geschwíndigkeit)
+            }
         }
     }
 
