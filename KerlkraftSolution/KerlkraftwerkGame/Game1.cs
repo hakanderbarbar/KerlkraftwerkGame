@@ -52,13 +52,21 @@ namespace KerlkraftwerkGame
 
             this.inputController.Update(gameTime, this.mainCharacter);
 
-            // Aktualisiere die Hindernisse
+            // Überprüfe Kollision mit den Hindernissen
             foreach (var obstacle in this.obstacles)
             {
                 obstacle.Update(gameTime);
 
-                // Füge hier Kollisionslogik hinzu, wenn nötig
+                if (this.mainCharacter.GetBoundingBox().Intersects(obstacle.GetBoundingBox()))
+                {
+                    // Hier kannst du den Code für das Neustarten des Spiels und das Entfernen von Hindernissen hinzufügen
+                    this.RestartGame();
+                    break; // Um sicherzustellen, dass das Spiel nur einmal neu gestartet wird, wenn eine Kollision auftritt
+                }
             }
+
+            // Entferne Hindernisse, die den Bildschirm verlassen haben
+            this.obstacles.RemoveAll(obstacle => obstacle.Position.X + obstacle.Width < 0);
 
             // Prüfe, ob ein neues Hindernis hinzugefügt werden soll
             if (this.RandomShouldAddObstacle())
@@ -88,6 +96,13 @@ namespace KerlkraftwerkGame
             this.spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void RestartGame()
+        {
+            Texture2D characterTexture = this.Content.Load<Texture2D>("mainCharacter");
+            this.mainCharacter = new Character(characterTexture, new Vector2(100, 345));
+            this.obstacles.Clear();
         }
 
         private void AddNewObstacle()

@@ -13,11 +13,16 @@
     private bool isJumping = false;
     private bool isFalling = false;
 
+    private Rectangle boundingBox; // Kollisions-Rechteck
+
     public Character(Texture2D texture, Vector2 startPosition)
     {
         this.texture = texture;
         this.position = startPosition;
         this.velocity = Vector2.Zero;
+
+        // Initialisiere das boundingBox-Rechteck
+        this.boundingBox = new Rectangle((int)this.position.X, (int)this.position.Y, texture.Width, texture.Height);
     }
 
     public void Update(GameTime gameTime)
@@ -57,6 +62,10 @@
                 this.isFalling = true;
             }
         }
+
+        // Aktualisiere das boundingBox-Rechteck
+        this.boundingBox.X = (int)this.position.X;
+        this.boundingBox.Y = (int)this.position.Y;
     }
 
     public void Jump()
@@ -81,5 +90,10 @@
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(this.texture, this.position, Color.White);
+    }
+
+    public Rectangle GetBoundingBox()
+    {
+        return this.boundingBox;
     }
 }

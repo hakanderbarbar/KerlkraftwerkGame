@@ -15,6 +15,19 @@ namespace KerlkraftwerkGame.Entities
             this.position = startPosition;
         }
 
+        // Öffentliche Eigenschaft (Property) für den Zugriff auf die Position
+        public Vector2 Position
+        {
+            get { return this.position; }
+            set { this.position = value; }
+        }
+
+        // Öffentliche Eigenschaft (Property) für den Zugriff auf die Breite des Hindernisses
+        public int Width
+        {
+            get { return this.texture.Width; }
+        }
+
         public void Update(GameTime gameTime)
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -24,6 +37,12 @@ namespace KerlkraftwerkGame.Entities
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(this.texture, this.position, Color.White);
+        }
+
+        // Füge diese Methode hinzu, um das Kollisionsrechteck des Hindernisses abzurufen
+        public Rectangle GetBoundingBox()
+        {
+            return new Rectangle((int)this.position.X, (int)this.position.Y, this.texture.Width, this.texture.Height);
         }
     }
 }
