@@ -1,7 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using KerlkraftwerkGame.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace KerlkraftwerkGame;
+namespace KerlkraftwerkGame.System;
 
 public class InputController
 {
