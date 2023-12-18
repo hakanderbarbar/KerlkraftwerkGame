@@ -108,22 +108,15 @@ namespace KerlkraftwerkGame
         private void AddNewObstacle()
         {
             // Lade die Hindernisse
-            Texture2D obstacleTexture1 = this.Content.Load<Texture2D>("tile1");
-            Texture2D obstacleTexture2 = this.Content.Load<Texture2D>("tile2");
+            Texture2D obstacleTexture = this.Content.Load<Texture2D>("shuriken");
 
             // Erzeuge ein neues Hindernis
             Obstacle newObstacle = new Obstacle(
-                this.GetRandomObstacleTexture(),  // Zufälliges Hindernisbild
+                obstacleTexture,  // Zufälliges Hindernisbild
                 new Vector2(this.GraphicsDevice.Viewport.Width, this.GetRandomObstacleYPosition()));
 
             // Füge das Hindernis zur Liste hinzu
             this.obstacles.Add(newObstacle);
-        }
-
-        private Texture2D GetRandomObstacleTexture()
-        {
-            // Gib zufällig "tile1" oder "tile2" zurück
-            return (this.random.Next(2) == 0) ? this.Content.Load<Texture2D>("tile1") : this.Content.Load<Texture2D>("tile2");
         }
 
         private int GetRandomObstacleYPosition()
