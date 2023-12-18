@@ -122,7 +122,7 @@ namespace KerlkraftwerkGame
         private int GetRandomObstacleYPosition()
         {
             // Gib eine zufällige Y-Position zurück (hier anpassen, je nachdem, wo du die Hindernisse haben möchtest)
-            return this.random.Next(200, this.GraphicsDevice.Viewport.Height - 200);
+            return this.random.Next(200, this.GraphicsDevice.Viewport.Height - 90);
         }
 
         private bool RandomShouldAddObstacle()
