@@ -13,8 +13,6 @@ public class InputController
         KeyboardState currentKeyboardState = Keyboard.GetState();
 
         // Der Charakter bewegt sich ständig nach vorne (Rennen)
-        character.Update(gameTime);
-
         // Springen, wenn die Leertaste gedrückt wird
         if (currentKeyboardState.IsKeyDown(Keys.Space) && !this.previousKeyboardState.IsKeyDown(Keys.Space))
         {

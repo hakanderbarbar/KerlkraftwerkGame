@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using KerlkraftwerkGame.Entities;
+using KerlkraftwerkGame.Global;
 using KerlkraftwerkGame.System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,14 +31,16 @@ namespace KerlkraftwerkGame
 
         protected override void LoadContent()
         {
+            Globals.Content = this.Content;
+
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
+            Globals.SpriteBatch = this.spriteBatch;
 
             // Lade den Hintergrund
             this.backgroundTexture = this.Content.Load<Texture2D>("background");
 
             // Lade den Charakter
-            Texture2D characterTexture = this.Content.Load<Texture2D>("mainCharacter");
-            this.mainCharacter = new Character(characterTexture, new Vector2(100, 345));
+            this.mainCharacter = new Character(new Vector2(100, 345));
 
             // Initialisiere den InputController
             this.inputController = new InputController();
@@ -45,6 +48,10 @@ namespace KerlkraftwerkGame
 
         protected override void Update(GameTime gameTime)
         {
+            this.mainCharacter.Update(gameTime);
+
+            Globals.Update(gameTime);
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
                 this.Exit();
@@ -85,7 +92,7 @@ namespace KerlkraftwerkGame
 
             this.spriteBatch.Draw(this.backgroundTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, this.CalculateBackgroundScale(), SpriteEffects.None, 0f);
 
-            this.mainCharacter.Draw(this.spriteBatch);
+            this.mainCharacter.Draw();
 
             // Zeichne die Hindernisse
             foreach (var obstacle in this.obstacles)
@@ -100,8 +107,7 @@ namespace KerlkraftwerkGame
 
         private void RestartGame()
         {
-            Texture2D characterTexture = this.Content.Load<Texture2D>("mainCharacter");
-            this.mainCharacter = new Character(characterTexture, new Vector2(100, 345));
+            this.mainCharacter = new Character(new Vector2(100, 345));
             this.obstacles.Clear();
         }
 

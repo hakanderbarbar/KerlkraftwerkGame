@@ -1,8 +1,12 @@
-﻿namespace KerlkraftwerkGame.Entities
+﻿using KerlkraftwerkGame.Global;
+using KerlkraftwerkGame.Managers;
+
+namespace KerlkraftwerkGame.Entities
 {
     public class Character
     {
-        private Texture2D texture;
+        private static Texture2D texture;
+        private readonly Animation anim;
         private Vector2 position;
         private Vector2 velocity;
         private float jumpSpeed = 650f;
@@ -17,18 +21,20 @@
 
         private Rectangle boundingBox; // Kollisions-Rechteck
 
-        public Character(Texture2D texture, Vector2 startPosition)
+        public Character(Vector2 startPosition)
         {
-            this.texture = texture;
+            texture ??= Globals.Content.Load<Texture2D>("Run");
+            this.anim = new Animation(texture, 8, 0.1f);
             this.position = startPosition;
-            this.velocity = Vector2.Zero;
 
             // Initialisiere das boundingBox-Rechteck
-            this.boundingBox = new Rectangle((int)this.position.X, (int)this.position.Y, texture.Width, texture.Height);
+            this.boundingBox = new Rectangle((int)this.position.X, (int)this.position.Y, this.anim.FrameWidth, texture.Height);
         }
 
         public void Update(GameTime gameTime)
         {
+            this.anim.Update();
+
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (this.isJumping)
@@ -48,9 +54,9 @@
                 this.velocity.Y += this.gravity * deltaTime;
                 this.position += this.velocity * deltaTime;
 
-                if (this.position.Y + this.texture.Height > this.groundLevel)
+                if (this.position.Y + texture.Height > this.groundLevel)
                 {
-                    this.position.Y = this.groundLevel - this.texture.Height;
+                    this.position.Y = this.groundLevel - texture.Height;
                     this.velocity.Y = 0f;
 
                     if (this.isFalling)
@@ -89,9 +95,9 @@
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
-            spriteBatch.Draw(this.texture, this.position, Color.White);
+            this.anim.Draw(this.position);
         }
 
         public Rectangle GetBoundingBox()

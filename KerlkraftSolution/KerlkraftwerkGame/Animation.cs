@@ -15,7 +15,6 @@ namespace KerlkraftwerkGame.Managers
         private readonly float aFrameTime;
         private int aFrame;
         private float aFrameTimeLeft;
-        private bool aActive = true;
 
         public Animation(Texture2D texture, int framesX, float frameTime)
         {
@@ -23,41 +22,22 @@ namespace KerlkraftwerkGame.Managers
             this.aFrameTime = frameTime;
             this.aFrameTimeLeft = this.aFrameTime;
             this.aFrames = framesX;
-            var frameWidth = this.aTexture.Width / framesX;
+            this.FrameWidth = this.aTexture.Width / framesX;
             var frameHeight = this.aTexture.Height;
 
             for (int i = 0; i < this.aFrames; i++)
             {
-                this.aSourceRectangles.Add(new (i * frameWidth, 0, frameWidth, frameHeight));
+                this.aSourceRectangles.Add(new (i * this.FrameWidth, 0, this.FrameWidth, frameHeight));
             }
         }
 
-        public void Start()
-        {
-            this.aActive = true;
-        }
-
-        public void Stop()
-        {
-            this.aActive = false;
-        }
-
-        public void Reset()
-        {
-            this.aFrame = 0;
-            this.aFrameTimeLeft = this.aFrameTime;
-        }
+        public int FrameWidth { get; private set; }
 
         public void Update()
         {
-            if (!this.aActive)
-            {
-                return;
-            }
-
             this.aFrameTimeLeft -= Globals.TotalSeconds;
 
-            if (this.aFrameTime <= 0)
+            if (this.aFrameTimeLeft <= 0)
             {
                 this.aFrameTimeLeft += this.aFrameTime;
                 this.aFrame = (this.aFrame + 1) % this.aFrames;

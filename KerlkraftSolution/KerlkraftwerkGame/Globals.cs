@@ -18,7 +18,7 @@ namespace KerlkraftwerkGame.Global
 
         public static void Update(GameTime gt)
         {
-            Time = (float)gt.ElapsedGameTime.TotalSeconds;
+            TotalSeconds = (float)gt.ElapsedGameTime.TotalSeconds;
         }
     }
 }
