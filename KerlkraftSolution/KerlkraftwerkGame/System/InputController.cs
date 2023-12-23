@@ -21,4 +21,9 @@ public class InputController
 
         this.previousKeyboardState = currentKeyboardState;
     }
+
+    public bool ShouldExit()
+    {
+        return GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape);
+    }
 }

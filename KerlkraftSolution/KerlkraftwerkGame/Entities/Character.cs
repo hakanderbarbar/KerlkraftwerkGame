@@ -39,36 +39,11 @@ namespace KerlkraftwerkGame.Entities
 
             if (this.isJumping)
             {
-                this.position.Y -= this.jumpSpeed * deltaTime;
-                this.jumpTimer += deltaTime;
-
-                if (this.jumpTimer >= this.jumpDuration)
-                {
-                    this.isJumping = false;
-                    this.jumpTimer = 0f;
-                    this.isFalling = true;
-                }
+                this.UpdateJump(deltaTime);
             }
             else
             {
-                this.velocity.Y += this.gravity * deltaTime;
-                this.position += this.velocity * deltaTime;
-
-                if (this.position.Y + texture.Height > this.groundLevel)
-                {
-                    this.position.Y = this.groundLevel - texture.Height;
-                    this.velocity.Y = 0f;
-
-                    if (this.isFalling)
-                    {
-                        this.isFalling = false;
-                        this.jumpsRemaining = 2;
-                    }
-                }
-                else
-                {
-                    this.isFalling = true;
-                }
+                this.UpdateFall(deltaTime);
             }
 
             // Aktualisiere das boundingBox-Rechteck
@@ -103,6 +78,41 @@ namespace KerlkraftwerkGame.Entities
         public Rectangle GetBoundingBox()
         {
             return this.boundingBox;
+        }
+
+        private void UpdateFall(float deltaTime)
+        {
+            this.velocity.Y += this.gravity * deltaTime;
+            this.position += this.velocity * deltaTime;
+
+            if (this.position.Y + texture.Height > this.groundLevel)
+            {
+                this.position.Y = this.groundLevel - texture.Height;
+                this.velocity.Y = 0f;
+
+                if (this.isFalling)
+                {
+                    this.isFalling = false;
+                    this.jumpsRemaining = 2;
+                }
+            }
+            else
+            {
+                this.isFalling = true;
+            }
+        }
+
+        private void UpdateJump(float deltaTime)
+        {
+            this.position.Y -= this.jumpSpeed * deltaTime;
+            this.jumpTimer += deltaTime;
+
+            if (this.jumpTimer >= this.jumpDuration)
+            {
+                this.isJumping = false;
+                this.jumpTimer = 0f;
+                this.isFalling = true;
+            }
         }
     }
 }

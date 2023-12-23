@@ -52,7 +52,7 @@ namespace KerlkraftwerkGame
 
             Globals.Update(gameTime);
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (this.inputController.ShouldExit())
             {
                 this.Exit();
             }
