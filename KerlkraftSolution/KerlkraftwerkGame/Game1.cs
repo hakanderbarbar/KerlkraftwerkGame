@@ -13,7 +13,7 @@ namespace KerlkraftwerkGame
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private Texture2D backgroundTexture;
+        private Background background;
         private Character mainCharacter;
         private InputController inputController;
         private List<Obstacle> obstacles;
@@ -32,12 +32,12 @@ namespace KerlkraftwerkGame
         protected override void LoadContent()
         {
             Globals.Content = this.Content;
-
+            Globals.GraphicsDevice = this.GraphicsDevice;
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             Globals.SpriteBatch = this.spriteBatch;
 
             // Lade den Hintergrund
-            this.backgroundTexture = this.Content.Load<Texture2D>("background");
+            this.background = new Background();
 
             // Lade den Charakter
             this.mainCharacter = new Character(new Vector2(100, 345));
@@ -90,7 +90,7 @@ namespace KerlkraftwerkGame
 
             this.spriteBatch.Begin();
 
-            this.spriteBatch.Draw(this.backgroundTexture, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, this.CalculateBackgroundScale(), SpriteEffects.None, 0f);
+            this.background.Draw();
 
             this.mainCharacter.Draw();
 
@@ -135,14 +135,6 @@ namespace KerlkraftwerkGame
         {
             // Zufällig entscheiden, ob ein neues Hindernis hinzugefügt werden soll
             return this.random.Next(100) < 1; // Hier kannst du die Wahrscheinlichkeit anpassen (1% in diesem Beispiel)
-        }
-
-        private float CalculateBackgroundScale()
-        {
-            float scaleWidth = (float)this.GraphicsDevice.Viewport.Width / this.backgroundTexture.Width;
-            float scaleHeight = (float)this.GraphicsDevice.Viewport.Height / this.backgroundTexture.Height;
-
-            return Math.Max(scaleWidth, scaleHeight);
         }
     }
 }
