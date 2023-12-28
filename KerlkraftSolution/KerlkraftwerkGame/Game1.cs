@@ -18,6 +18,12 @@ namespace KerlkraftwerkGame
         private InputController inputController;
         private List<Obstacle> obstacles;
         private Random random;
+        private GameState gameState = GameState.StartScreen;
+
+        private enum GameState
+        {
+            StartScreen, Playing
+        }
 
         public Game1()
         {
@@ -40,7 +46,7 @@ namespace KerlkraftwerkGame
             this.background = new Background();
 
             // Lade den Charakter
-            this.mainCharacter = new Character(new Vector2(100, 345));
+            this.mainCharacter = new Character(new Vector2(100, 300));
 
             // Initialisiere den InputController
             this.inputController = new InputController();
@@ -48,37 +54,57 @@ namespace KerlkraftwerkGame
 
         protected override void Update(GameTime gameTime)
         {
-            this.mainCharacter.Update(gameTime);
-
-            Globals.Update(gameTime);
-
-            if (this.inputController.ShouldExit())
+            switch (this.gameState)
             {
-                this.Exit();
-            }
+                case GameState.StartScreen:
+                    // Überprüfe, ob eine Taste gedrückt wurde, um das Spiel zu starten
+                    if (Keyboard.GetState().GetPressedKeys().Length > 0)
+                    {
+                        this.gameState = GameState.Playing;
 
-            this.inputController.Update(gameTime, this.mainCharacter);
+                        // Stelle sicher, dass der Charakter bei Spielstart an der richtigen Position ist
+                        this.mainCharacter = new Character(new Vector2(100, 300));
+                    }
 
-            // Überprüfe Kollision mit den Hindernissen
-            foreach (var obstacle in this.obstacles)
-            {
-                obstacle.Update(gameTime);
+                    break;
+                case GameState.Playing:
+                    // Update des Charakters
+                    this.mainCharacter.Update(gameTime);
 
-                if (this.mainCharacter.GetBoundingBox().Intersects(obstacle.GetBoundingBox()))
-                {
-                    // Hier kannst du den Code für das Neustarten des Spiels und das Entfernen von Hindernissen hinzufügen
-                    this.RestartGame();
-                    break; // Um sicherzustellen, dass das Spiel nur einmal neu gestartet wird, wenn eine Kollision auftritt
-                }
-            }
+                    Globals.Update(gameTime);
 
-            // Entferne Hindernisse, die den Bildschirm verlassen haben
-            this.obstacles.RemoveAll(obstacle => obstacle.Position.X + obstacle.Width < 0);
+                    // Überprüfe, ob das Spiel beendet werden soll
+                    if (this.inputController.ShouldExit())
+                    {
+                        this.Exit();
+                    }
 
-            // Prüfe, ob ein neues Hindernis hinzugefügt werden soll
-            if (this.RandomShouldAddObstacle())
-            {
-                this.AddNewObstacle();
+                    // Update des InputControllers
+                    this.inputController.Update(gameTime, this.mainCharacter);
+
+                    // Überprüfe Kollision mit den Hindernissen
+                    foreach (var obstacle in this.obstacles)
+                    {
+                        obstacle.Update(gameTime);
+
+                        if (this.mainCharacter.GetBoundingBox().Intersects(obstacle.GetBoundingBox()))
+                        {
+                            // Hier kannst du den Code für das Neustarten des Spiels und das Entfernen von Hindernissen hinzufügen
+                            this.RestartGame();
+                            break; // Um sicherzustellen, dass das Spiel nur einmal neu gestartet wird, wenn eine Kollision auftritt
+                        }
+                    }
+
+                    // Entferne Hindernisse, die den Bildschirm verlassen haben
+                    this.obstacles.RemoveAll(obstacle => obstacle.Position.X + obstacle.Width < 0);
+
+                    // Prüfe, ob ein neues Hindernis hinzugefügt werden soll
+                    if (this.RandomShouldAddObstacle())
+                    {
+                        this.AddNewObstacle();
+                    }
+
+                    break;
             }
 
             base.Update(gameTime);
@@ -90,14 +116,25 @@ namespace KerlkraftwerkGame
 
             this.spriteBatch.Begin();
 
-            this.background.Draw();
-
-            this.mainCharacter.Draw();
-
-            // Zeichne die Hindernisse
-            foreach (var obstacle in this.obstacles)
+            if (this.gameState == GameState.StartScreen)
             {
-                obstacle.Draw(this.spriteBatch);
+                // Zeichne den Charakter und die Map im StartScreen
+                this.background.Draw();
+                this.mainCharacter.Draw();
+            }
+            else if (this.gameState == GameState.Playing)
+            {
+                // Zeichnung des Hintergrunds
+                this.background.Draw();
+
+                // Zeichnung des Charakters
+                this.mainCharacter.Draw();
+
+                // Zeichnung der Hindernisse
+                foreach (var obstacle in this.obstacles)
+                {
+                    obstacle.Draw(this.spriteBatch);
+                }
             }
 
             this.spriteBatch.End();
@@ -107,7 +144,8 @@ namespace KerlkraftwerkGame
 
         private void RestartGame()
         {
-            this.mainCharacter = new Character(new Vector2(100, 345));
+            this.gameState = GameState.StartScreen;
+            this.mainCharacter = new Character(new Vector2(100, 300));
             this.obstacles.Clear();
         }
 
