@@ -19,11 +19,7 @@ namespace KerlkraftwerkGame
         private List<Obstacle> obstacles;
         private Random random;
         private GameState gameState = GameState.StartScreen;
-
-        private enum GameState
-        {
-            StartScreen, Playing
-        }
+        private Texture2D pressAnyKeyTexture;
 
         public Game1()
         {
@@ -33,6 +29,12 @@ namespace KerlkraftwerkGame
             this.IsMouseVisible = true;
             this.obstacles = new List<Obstacle>();
             this.random = new Random();
+        }
+
+        private enum GameState
+        {
+            StartScreen,
+            Playing,
         }
 
         protected override void LoadContent()
@@ -47,6 +49,9 @@ namespace KerlkraftwerkGame
 
             // Lade den Charakter
             this.mainCharacter = new Character(new Vector2(100, 300));
+
+            // Lade die PressAnyKeyToStart-Grafik
+            this.pressAnyKeyTexture = this.Content.Load<Texture2D>("PressAnyKeyToStart");
 
             // Initialisiere den InputController
             this.inputController = new InputController();
@@ -121,6 +126,10 @@ namespace KerlkraftwerkGame
                 // Zeichne den Charakter und die Map im StartScreen
                 this.background.Draw();
                 this.mainCharacter.Draw();
+
+                // Zeichne die PressAnyKeyToStart-Grafik
+                Vector2 pressAnyKeyPosition = new Vector2(10, 50); // Passe die Position an
+                this.spriteBatch.Draw(this.pressAnyKeyTexture, pressAnyKeyPosition, Color.White);
             }
             else if (this.gameState == GameState.Playing)
             {
