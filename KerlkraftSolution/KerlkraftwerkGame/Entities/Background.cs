@@ -6,17 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using KerlkraftwerkGame.Global;
 
-
 namespace KerlkraftwerkGame.Entities
 {
-
     public class Background
     {
         private Texture2D backgroundTexture;
 
-        public Background()
+        public Background(string initialMap)
         {
-            this.backgroundTexture = Globals.Content.Load<Texture2D>("background");
+            this.ChangeTexture(initialMap);
+        }
+
+        public void ChangeTexture(string newMap)
+        {
+            this.backgroundTexture = Globals.Content.Load<Texture2D>(newMap);
         }
 
         public void Draw()

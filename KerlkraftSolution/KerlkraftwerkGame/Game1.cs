@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using KerlkraftwerkGame.Entities;
 using KerlkraftwerkGame.Global;
+using KerlkraftwerkGame.Managers;
 using KerlkraftwerkGame.System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,12 +21,14 @@ namespace KerlkraftwerkGame
         private Random random;
         private GameState gameState = GameState.StartScreen;
         private Texture2D pressAnyKeyTexture;
+        private GameEventHandler gameEventHandler;
+        private float elapsedTime = 0f;
+        private float backgroundChangeInterval = 5f;
 
         public Game1()
         {
             this.graphics = new GraphicsDeviceManager(this);
             this.Content.RootDirectory = "Content";
-
             this.IsMouseVisible = true;
             this.obstacles = new List<Obstacle>();
             this.random = new Random();
@@ -44,8 +47,8 @@ namespace KerlkraftwerkGame
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             Globals.SpriteBatch = this.spriteBatch;
 
-            // Lade den Hintergrund
-            this.background = new Background();
+            // Lade den Hintergrund mit dem Anfangsbild "background"
+            this.background = new Background("background");
 
             // Lade den Charakter
             this.mainCharacter = new Character(new Vector2(100, 300));
@@ -55,6 +58,12 @@ namespace KerlkraftwerkGame
 
             // Initialisiere den InputController
             this.inputController = new InputController();
+
+            // Initialisiere den GameEventHandler
+            this.gameEventHandler = new GameEventHandler();
+
+            // Abonniere das MapChanged-Event
+            this.gameEventHandler.MapChanged += this.HandleMapChanged;
         }
 
         protected override void Update(GameTime gameTime)
@@ -109,6 +118,17 @@ namespace KerlkraftwerkGame
                         this.AddNewObstacle();
                     }
 
+                    // Überwache die Zeit und ändere den Hintergrund nach einer bestimmten Zeitspanne
+                    this.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (this.elapsedTime >= this.backgroundChangeInterval)
+                    {
+                        // Ändere den Hintergrund
+                        this.ChangeBackground();
+
+                        // Setze die Zeit zurück !!!ERKLÄREN BITTE WAS IST ELAPSED TIME
+                        this.elapsedTime = 0f;
+                    }
+
                     break;
             }
 
@@ -151,6 +171,11 @@ namespace KerlkraftwerkGame
             base.Draw(gameTime);
         }
 
+        private void HandleMapChanged(string newMap)
+        {
+            this.ChangeBackground();
+        }
+
         private void RestartGame()
         {
             this.gameState = GameState.StartScreen;
@@ -182,6 +207,26 @@ namespace KerlkraftwerkGame
         {
             // Zufällig entscheiden, ob ein neues Hindernis hinzugefügt werden soll
             return this.random.Next(100) < 1; // Hier kannst du die Wahrscheinlichkeit anpassen (1% in diesem Beispiel)
+        }
+
+        private void ChangeBackground()
+        {
+            // Random Zahl wird berechnet um den Hintergrund zu ändenr
+            int randomBackground = this.random.Next(3); // Es gibt 3 verschieden Hintergründe zwischen denen gewechselt wird
+            switch (randomBackground)
+            {
+                case 0:
+                    this.background.ChangeTexture("spaceBackground");
+                    break;
+
+                case 1:
+                    this.background.ChangeTexture("gravityMachineBackground");
+                    break;
+
+                case 2:
+                    this.background.ChangeTexture("background");
+                    break;
+            }
         }
     }
 }
