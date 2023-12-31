@@ -10,7 +10,7 @@ namespace KerlkraftwerkGame.Entities
         private Vector2 position;
         private Vector2 velocity;
         private float jumpSpeed = 650f;
-        private float gravity = 1000f;
+        private float gravity = 1000f; // Dieser Wert soll sich gleichzeitig mit der Map ändern
         private int jumpsRemaining = 2;
         private float jumpDuration = 0.1f;
         private float jumpTimer = 0f;
@@ -65,9 +65,15 @@ namespace KerlkraftwerkGame.Entities
                 }
                 else if (this.jumpsRemaining == 0)
                 {
-                    this.velocity.Y = -this.jumpSpeed / 2f; // Second Jump (mit halber Geschwíndigkeit)
+                    this.velocity.Y = -this.jumpSpeed / 2f; // Second Jump (mit halber Geschwindigkeit)
                 }
             }
+        }
+
+        public void SetGravity(float newGravity)
+        {
+            // Methode zum Setzen der Gravitation
+            this.gravity = newGravity;
         }
 
         public void Draw()

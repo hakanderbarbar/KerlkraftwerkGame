@@ -211,20 +211,24 @@ namespace KerlkraftwerkGame
 
         private void ChangeBackground()
         {
-            // Random Zahl wird berechnet um den Hintergrund zu ändenr
-            int randomBackground = this.random.Next(3); // Es gibt 3 verschieden Hintergründe zwischen denen gewechselt wird
+            // Random Zahl wird berechnet um den Hintergrund zu ändern
+            int randomBackground = this.random.Next(3); // Es gibt 3 verschiedene Hintergründe zwischen denen gewechselt wird
+
             switch (randomBackground)
             {
                 case 0:
                     this.background.ChangeTexture("spaceBackground");
+                    this.mainCharacter.SetGravity(650f); // Set-Methode um Gravity zu ändern
                     break;
 
                 case 1:
                     this.background.ChangeTexture("gravityMachineBackground");
+                    this.mainCharacter.SetGravity(1350f);
                     break;
 
                 case 2:
                     this.background.ChangeTexture("background");
+                    this.mainCharacter.SetGravity(1000f);
                     break;
             }
         }
