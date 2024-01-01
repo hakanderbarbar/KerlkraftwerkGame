@@ -148,7 +148,7 @@ namespace KerlkraftwerkGame
                 this.mainCharacter.Draw();
 
                 // Zeichne die PressAnyKeyToStart-Grafik
-                Vector2 pressAnyKeyPosition = new Vector2(10, 50); // Passe die Position an
+                Vector2 pressAnyKeyPosition = new (10, 50); // Passe die Position an
                 this.spriteBatch.Draw(this.pressAnyKeyTexture, pressAnyKeyPosition, Color.White);
             }
             else if (this.gameState == GameState.Playing)
@@ -200,7 +200,7 @@ namespace KerlkraftwerkGame
             newObstacle.SetSpeed(this.GetObstacleSpeedForCurrentBackground());
         }
 
-        private float GetObstacleSpeedForCurrentBackground()
+        private float GetObstacleSpeedForCurrentBackground() // Geschwindigkeit für neu hinzugefügte Hindernisse basierend auf dem aktuellen Hintergrund anpassen
         {
             switch (this.background.CurrentTextureName)
             {
@@ -257,7 +257,7 @@ namespace KerlkraftwerkGame
             }
         }
 
-        private void SetObstacleSpeed(float newSpeed)
+        private void SetObstacleSpeed(float newSpeed) // Geschwindigkeit aller vorhandenen (zu sehenden) Hindernisse ändern
         {
             foreach (var obstacle in this.obstacles)
             {
