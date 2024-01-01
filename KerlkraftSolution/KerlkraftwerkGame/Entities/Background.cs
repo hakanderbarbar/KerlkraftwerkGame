@@ -1,24 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using KerlkraftwerkGame.Global;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace KerlkraftwerkGame.Entities
 {
     public class Background
     {
         private Texture2D backgroundTexture;
+        private string currentTextureName;
 
         public Background(string initialMap)
         {
             this.ChangeTexture(initialMap);
         }
 
+        public string CurrentTextureName
+        {
+            get { return this.currentTextureName; }
+        }
+
         public void ChangeTexture(string newMap)
         {
+            this.currentTextureName = newMap;
             this.backgroundTexture = Globals.Content.Load<Texture2D>(newMap);
         }
 

@@ -44,5 +44,10 @@ namespace KerlkraftwerkGame.Entities
         {
             return new Rectangle((int)this.position.X, (int)this.position.Y, this.texture.Width, this.texture.Height);
         }
+
+        public void SetSpeed(float newSpeed)
+        {
+            this.speed = newSpeed;
+        }
     }
 }

@@ -125,7 +125,7 @@ namespace KerlkraftwerkGame
                         // Ändere den Hintergrund
                         this.ChangeBackground();
 
-                        // Setze die Zeit zurück !!!ERKLÄREN BITTE WAS IST ELAPSED TIME
+                        // Setze die Zeit zurück
                         this.elapsedTime = 0f;
                     }
 
@@ -195,6 +195,27 @@ namespace KerlkraftwerkGame
 
             // Füge das Hindernis zur Liste hinzu
             this.obstacles.Add(newObstacle);
+
+            // Passe die Geschwindigkeit des neuen Hindernisses basierend auf dem aktuellen Hintergrund an
+            newObstacle.SetSpeed(this.GetObstacleSpeedForCurrentBackground());
+        }
+
+        private float GetObstacleSpeedForCurrentBackground()
+        {
+            switch (this.background.CurrentTextureName)
+            {
+                case "spaceBackground":
+                    return 175f; // Passe die Geschwindigkeit für den Weltraumhintergrund an
+
+                case "gravityMachineBackground":
+                    return 425f; // Passe die Geschwindigkeit für den Hintergrund der Gravitationsmaschine an
+
+                case "background":
+                    return 300f; // Passe die Geschwindigkeit für den Standardhintergrund an
+
+                default:
+                    return 300f; // Standardgeschwindigkeit, wenn der Hintergrund nicht erkannt wird
+            }
         }
 
         private int GetRandomObstacleYPosition()
@@ -219,17 +240,28 @@ namespace KerlkraftwerkGame
                 case 0:
                     this.background.ChangeTexture("spaceBackground");
                     this.mainCharacter.SetGravity(650f); // Set-Methode um Gravity zu ändern
+                    this.SetObstacleSpeed(175f); // Geschwindigkeit der Hindernisse anpassen
                     break;
 
                 case 1:
                     this.background.ChangeTexture("gravityMachineBackground");
                     this.mainCharacter.SetGravity(1350f);
+                    this.SetObstacleSpeed(425f); // Geschwindigkeit der Hindernisse anpassen
                     break;
 
                 case 2:
                     this.background.ChangeTexture("background");
                     this.mainCharacter.SetGravity(1000f);
+                    this.SetObstacleSpeed(300f); // Geschwindigkeit der Hindernisse anpassen
                     break;
+            }
+        }
+
+        private void SetObstacleSpeed(float newSpeed)
+        {
+            foreach (var obstacle in this.obstacles)
+            {
+                obstacle.SetSpeed(newSpeed);
             }
         }
     }
