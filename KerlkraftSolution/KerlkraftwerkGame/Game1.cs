@@ -50,18 +50,14 @@ namespace KerlkraftwerkGame
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             Globals.SpriteBatch = this.spriteBatch;
 
-
             this.background = new Background("background");
-
 
             this.mainCharacter = new Character(new Vector2(100, 300));
 
             // Lade die PressAnyKeyToStart-Grafik
             this.pressAnyKeyTexture = this.Content.Load<Texture2D>("PressAnyKeyToStart");
 
-
             this.inputController = new InputController();
-
 
             this.gameEventHandler = new GameEventHandler();
 

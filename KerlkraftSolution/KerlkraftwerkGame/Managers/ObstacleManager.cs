@@ -10,12 +10,8 @@ namespace KerlkraftwerkGame.Managers
 {
     public class ObstacleManager
     {
-        public event Action CollisionDetected;
-
         private List<Obstacle> obstacles;
-
         private CollisionManager collisionManager;
-
         private Random random;
 
         public ObstacleManager(CollisionManager collisionManager)
@@ -30,6 +26,8 @@ namespace KerlkraftwerkGame.Managers
             this.obstacles = new List<Obstacle>();
             this.random = new Random();
         }
+
+        public event Action CollisionDetected;
 
         // Fügt neues Obstacle in die Liste hinzu
         public void AddObstacle(Obstacle obstacle)
