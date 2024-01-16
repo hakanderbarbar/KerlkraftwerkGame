@@ -19,11 +19,11 @@ namespace KerlkraftwerkGame
         private InputController inputController;
         private List<Obstacle> obstacles;
         private Random random;
+        private ObstacleManager obstacleManager;
         private GameState gameState = GameState.StartScreen;
         private Texture2D pressAnyKeyTexture;
         private GameEventHandler gameEventHandler;
-        private float elapsedTime = 0f;
-        private float backgroundChangeInterval = 5f;
+        private MapManager mapManager;
 
         public Game1()
         {
@@ -32,6 +32,9 @@ namespace KerlkraftwerkGame
             this.IsMouseVisible = true;
             this.obstacles = new List<Obstacle>();
             this.random = new Random();
+            this.obstacleManager = new ObstacleManager();
+            this.obstacleManager.CollisionDetected += this.OnCollisionDetected;  // Reagiert auf CollisionDetected-Event
+            this.mapManager = new MapManager(this.background, this.mainCharacter, this.obstacleManager);
         }
 
         private enum GameState
@@ -47,20 +50,22 @@ namespace KerlkraftwerkGame
             this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
             Globals.SpriteBatch = this.spriteBatch;
 
-            // Lade den Hintergrund mit dem Anfangsbild "background"
+
             this.background = new Background("background");
 
-            // Lade den Charakter
+
             this.mainCharacter = new Character(new Vector2(100, 300));
 
             // Lade die PressAnyKeyToStart-Grafik
             this.pressAnyKeyTexture = this.Content.Load<Texture2D>("PressAnyKeyToStart");
 
-            // Initialisiere den InputController
+
             this.inputController = new InputController();
 
-            // Initialisiere den GameEventHandler
+
             this.gameEventHandler = new GameEventHandler();
+
+            this.mapManager = new MapManager(this.background, this.mainCharacter, this.obstacleManager);
 
             // Abonniere das MapChanged-Event
             this.gameEventHandler.MapChanged += this.HandleMapChanged;
@@ -72,7 +77,7 @@ namespace KerlkraftwerkGame
             {
                 case GameState.StartScreen:
                     // Überprüfe, ob eine Taste gedrückt wurde, um das Spiel zu starten
-                    if (Keyboard.GetState().GetPressedKeys().Length > 0)
+                    if (this.inputController.PressedAnyKey())
                     {
                         this.gameState = GameState.Playing;
 
@@ -84,6 +89,8 @@ namespace KerlkraftwerkGame
                 case GameState.Playing:
                     // Update des Charakters
                     this.mainCharacter.Update(gameTime);
+
+                    this.mapManager.UpdateBackground(gameTime);
 
                     Globals.Update(gameTime);
 
@@ -97,36 +104,12 @@ namespace KerlkraftwerkGame
                     this.inputController.Update(gameTime, this.mainCharacter);
 
                     // Überprüfe Kollision mit den Hindernissen
-                    foreach (var obstacle in this.obstacles)
-                    {
-                        obstacle.Update(gameTime);
-
-                        if (this.mainCharacter.GetBoundingBox().Intersects(obstacle.GetBoundingBox()))
-                        {
-                            // Hier kannst du den Code für das Neustarten des Spiels und das Entfernen von Hindernissen hinzufügen
-                            this.RestartGame();
-                            break; // Um sicherzustellen, dass das Spiel nur einmal neu gestartet wird, wenn eine Kollision auftritt
-                        }
-                    }
-
-                    // Entferne Hindernisse, die den Bildschirm verlassen haben
-                    this.obstacles.RemoveAll(obstacle => obstacle.Position.X + obstacle.Width < 0);
+                    this.obstacleManager.Update(gameTime, this.mainCharacter);
 
                     // Prüfe, ob ein neues Hindernis hinzugefügt werden soll
                     if (this.RandomShouldAddObstacle())
                     {
                         this.AddNewObstacle();
-                    }
-
-                    // Überwache die Zeit und ändere den Hintergrund nach einer bestimmten Zeitspanne
-                    this.elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (this.elapsedTime >= this.backgroundChangeInterval)
-                    {
-                        // Ändere den Hintergrund
-                        this.ChangeBackground();
-
-                        // Setze die Zeit zurück
-                        this.elapsedTime = 0f;
                     }
 
                     break;
@@ -160,10 +143,7 @@ namespace KerlkraftwerkGame
                 this.mainCharacter.Draw();
 
                 // Zeichnung der Hindernisse
-                foreach (var obstacle in this.obstacles)
-                {
-                    obstacle.Draw(this.spriteBatch);
-                }
+                this.obstacleManager.Draw(this.spriteBatch);
             }
 
             this.spriteBatch.End();
@@ -173,14 +153,7 @@ namespace KerlkraftwerkGame
 
         private void HandleMapChanged(string newMap)
         {
-            this.ChangeBackground();
-        }
-
-        private void RestartGame()
-        {
-            this.gameState = GameState.StartScreen;
-            this.mainCharacter = new Character(new Vector2(100, 300));
-            this.obstacles.Clear();
+            this.mapManager.ChangeMap();
         }
 
         private void AddNewObstacle()
@@ -194,28 +167,10 @@ namespace KerlkraftwerkGame
                 new Vector2(this.GraphicsDevice.Viewport.Width, this.GetRandomObstacleYPosition()));
 
             // Füge das Hindernis zur Liste hinzu
-            this.obstacles.Add(newObstacle);
+            this.obstacleManager.AddObstacle(newObstacle);
 
             // Passe die Geschwindigkeit des neuen Hindernisses basierend auf dem aktuellen Hintergrund an
-            newObstacle.SetSpeed(this.GetObstacleSpeedForCurrentBackground());
-        }
-
-        private float GetObstacleSpeedForCurrentBackground() // Geschwindigkeit für neu hinzugefügte Hindernisse basierend auf dem aktuellen Hintergrund anpassen
-        {
-            switch (this.background.CurrentTextureName)
-            {
-                case "spaceBackground":
-                    return 175f; // Passe die Geschwindigkeit für den Weltraumhintergrund an
-
-                case "gravityMachineBackground":
-                    return 425f; // Passe die Geschwindigkeit für den Hintergrund der Gravitationsmaschine an
-
-                case "background":
-                    return 300f; // Passe die Geschwindigkeit für den Standardhintergrund an
-
-                default:
-                    return 300f; // Standardgeschwindigkeit, wenn der Hintergrund nicht erkannt wird
-            }
+            newObstacle.SetSpeed(this.mapManager.GetObstacleSpeedForCurrentBackground());
         }
 
         private int GetRandomObstacleYPosition()
@@ -230,39 +185,16 @@ namespace KerlkraftwerkGame
             return this.random.Next(100) < 1; // Hier kannst du die Wahrscheinlichkeit anpassen (1% in diesem Beispiel)
         }
 
-        private void ChangeBackground()
+        private void RestartGame()
         {
-            // Random Zahl wird berechnet um den Hintergrund zu ändern
-            int randomBackground = this.random.Next(3); // Es gibt 3 verschiedene Hintergründe zwischen denen gewechselt wird
-
-            switch (randomBackground)
-            {
-                case 0:
-                    this.background.ChangeTexture("spaceBackground");
-                    this.mainCharacter.SetGravity(650f); // Set-Methode um Gravity zu ändern
-                    this.SetObstacleSpeed(175f); // Geschwindigkeit der Hindernisse anpassen
-                    break;
-
-                case 1:
-                    this.background.ChangeTexture("gravityMachineBackground");
-                    this.mainCharacter.SetGravity(1350f);
-                    this.SetObstacleSpeed(425f); // Geschwindigkeit der Hindernisse anpassen
-                    break;
-
-                case 2:
-                    this.background.ChangeTexture("background");
-                    this.mainCharacter.SetGravity(1000f);
-                    this.SetObstacleSpeed(300f); // Geschwindigkeit der Hindernisse anpassen
-                    break;
-            }
+            this.gameState = GameState.StartScreen;
+            this.mainCharacter = new Character(new Vector2(100, 300));
+            this.obstacleManager.Reset();
         }
 
-        private void SetObstacleSpeed(float newSpeed) // Geschwindigkeit aller vorhandenen (zu sehenden) Hindernisse ändern
+        private void OnCollisionDetected()
         {
-            foreach (var obstacle in this.obstacles)
-            {
-                obstacle.SetSpeed(newSpeed);
-            }
+            this.RestartGame();
         }
     }
 }

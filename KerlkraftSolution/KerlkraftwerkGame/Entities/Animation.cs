@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using KerlkraftwerkGame.Global;
 
-namespace KerlkraftwerkGame.Managers
+namespace KerlkraftwerkGame.Entities
 {
     public class Animation
     {
         private readonly Texture2D aTexture;
-        private readonly List<Rectangle> aSourceRectangles = new ();
+        private readonly List<Rectangle> aSourceRectangles = new();
         private readonly int aFrames;
         private readonly float aFrameTime;
         private int aFrame;

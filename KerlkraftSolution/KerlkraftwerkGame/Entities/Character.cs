@@ -1,5 +1,4 @@
 ﻿using KerlkraftwerkGame.Global;
-using KerlkraftwerkGame.Managers;
 
 namespace KerlkraftwerkGame.Entities
 {
