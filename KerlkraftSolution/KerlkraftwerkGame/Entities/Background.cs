@@ -1,7 +1,5 @@
 ﻿using System;
 using KerlkraftwerkGame.Global;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace KerlkraftwerkGame.Entities
 {

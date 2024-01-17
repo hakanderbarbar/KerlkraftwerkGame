@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace KerlkraftwerkGame.Entities
+﻿namespace KerlkraftwerkGame.Entities
 {
     public class Obstacle
     {
@@ -15,11 +12,21 @@ namespace KerlkraftwerkGame.Entities
             this.position = startPosition;
         }
 
+        public Obstacle(int viewportWidth)
+        {
+            this.position = new Vector2(viewportWidth, 300);
+        }
+
         // Öffentliche Eigenschaft (Property) für den Zugriff auf die Position
         public Vector2 Position
         {
             get { return this.position; }
             set { this.position = value; }
+        }
+
+        public float ObstacleSpeed
+        {
+            get { return this.speed; }
         }
 
         // Öffentliche Eigenschaft (Property) für den Zugriff auf die Breite des Hindernisses

@@ -30,6 +30,31 @@ namespace KerlkraftwerkGame.Entities
             this.boundingBox = new Rectangle((int)this.position.X, (int)this.position.Y, this.anim.FrameWidth, texture.Height);
         }
 
+        public Character()
+        {
+            this.position = new Vector2(100, 300);
+        }
+
+        public bool IsJumping
+        {
+            get { return this.isJumping; }
+        }
+
+        public int JumpsRemaining
+        {
+            get { return this.jumpsRemaining; }
+        }
+
+        public float JumpSpeed
+        {
+            get { return this.jumpSpeed; }
+        }
+
+        public Vector2 Velocity
+        {
+            get { return this.velocity; }
+        }
+
         public void Update(GameTime gameTime)
         {
             this.anim.Update();

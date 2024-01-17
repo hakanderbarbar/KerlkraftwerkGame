@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using KerlkraftwerkGame.Entities;
-using KerlkraftwerkGame.Global;
 
 namespace KerlkraftwerkGame.Managers
 {
@@ -14,12 +10,6 @@ namespace KerlkraftwerkGame.Managers
         private CollisionManager collisionManager;
         private Random random;
 
-        public ObstacleManager(CollisionManager collisionManager)
-        {
-            this.obstacles = new List<Obstacle>();
-            this.collisionManager = collisionManager;
-        }
-
         public ObstacleManager()
         {
             this.collisionManager = new CollisionManager();
@@ -28,6 +18,11 @@ namespace KerlkraftwerkGame.Managers
         }
 
         public event Action CollisionDetected;
+
+        public List<Obstacle> Obstacles
+        {
+            get { return this.obstacles; }
+        }
 
         // Fügt neues Obstacle in die Liste hinzu
         public void AddObstacle(Obstacle obstacle)

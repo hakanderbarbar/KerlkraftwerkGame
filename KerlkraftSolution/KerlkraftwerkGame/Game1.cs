@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using KerlkraftwerkGame.Entities;
 using KerlkraftwerkGame.Global;
 using KerlkraftwerkGame.Managers;
 using KerlkraftwerkGame.System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace KerlkraftwerkGame
 {
@@ -17,7 +13,6 @@ namespace KerlkraftwerkGame
         private Background background;
         private Character mainCharacter;
         private InputController inputController;
-        private List<Obstacle> obstacles;
         private Random random;
         private ObstacleManager obstacleManager;
         private GameState gameState = GameState.StartScreen;
@@ -30,7 +25,6 @@ namespace KerlkraftwerkGame
             this.graphics = new GraphicsDeviceManager(this);
             this.Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
-            this.obstacles = new List<Obstacle>();
             this.random = new Random();
             this.obstacleManager = new ObstacleManager();
             this.obstacleManager.CollisionDetected += this.OnCollisionDetected;  // Reagiert auf CollisionDetected-Event
