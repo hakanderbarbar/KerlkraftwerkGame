@@ -72,7 +72,6 @@ namespace KerlkraftwerkGame
                         this.gameState = GameState.Playing;
 
                         // Stelle sicher, dass der Charakter bei Spielstart an der richtigen Position ist
-                        this.mainCharacter = new Character(new Vector2(100, 300));
                     }
 
                     break;
@@ -178,7 +177,7 @@ namespace KerlkraftwerkGame
         private void RestartGame()
         {
             this.gameState = GameState.StartScreen;
-            this.mainCharacter = new Character(new Vector2(100, 300));
+            this.mainCharacter.SetToStart(new Vector2(100, 300));
             this.obstacleManager.Reset();
         }
 

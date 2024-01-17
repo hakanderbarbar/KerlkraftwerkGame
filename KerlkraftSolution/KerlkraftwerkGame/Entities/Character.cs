@@ -55,6 +55,11 @@ namespace KerlkraftwerkGame.Entities
             get { return this.velocity; }
         }
 
+        public void SetToStart(Vector2 startpos)
+        {
+            this.position = startpos;
+        }
+
         public void Update(GameTime gameTime)
         {
             this.anim.Update();
