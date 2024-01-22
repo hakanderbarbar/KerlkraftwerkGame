@@ -13,9 +13,19 @@ namespace KerlkraftwerkGame.Entities
             this.ChangeTexture(initialMap);
         }
 
+        public Background()
+        {
+            this.currentTextureName = null;
+        }
+
         public string CurrentTextureName
         {
             get { return this.currentTextureName; }
+        }
+
+        public void SetCurrentTextureName(string textureName)
+        {
+            this.currentTextureName = textureName;
         }
 
         public void ChangeTexture(string newMap)

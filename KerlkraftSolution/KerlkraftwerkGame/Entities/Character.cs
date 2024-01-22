@@ -50,9 +50,29 @@ namespace KerlkraftwerkGame.Entities
             get { return this.jumpSpeed; }
         }
 
+        public Vector2 Position
+        {
+            get { return this.position; }
+        }
+
+        public float Gravity
+        {
+            get { return this.gravity; }
+        }
+
         public Vector2 Velocity
         {
             get { return this.velocity; }
+        }
+
+        public void SetIsJumping(bool isJumping)
+        {
+            this.isJumping = isJumping;
+        }
+
+        public void SetJumpsRemaining(int jumps)
+        {
+            this.jumpsRemaining = jumps;
         }
 
         public void SetToStart(Vector2 startpos)
