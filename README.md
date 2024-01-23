@@ -13,10 +13,10 @@ Im Startbildschirm kann eine beliebige Taste betätigt werden, um das Spiel zu s
 Im Spiel weichen Sie den Hindernissen mit einem Sprung oder auch einem Doppelsprung aus. Um zu Springen muss die Leertaste betätigt werden. Für den Doppelsprung kann die Leertaste nach dem ersten Sprung noch einaml betätigt werdne.
 
 #Dokumaentation
-Ich verweise auf unsere Wiki für eine ausführliche und detaillierte Dokumentation unseres Projektes.
+Wir verweisen auf unsere Wiki für eine ausführliche und detaillierte Dokumentation unseres Projektes.
 
 #Mitwirkende
 Am Projetk haben folgende heldenhafte Studenten gearbeitet:
-Can Dogan 35920
-Hakan Kaya
+Can Dogan 35920,
+Hakan Kaya,
 Sascha Vusatjuk
