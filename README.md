@@ -10,4 +10,5 @@ But be careful! The gravity might suddenly change. :)
 
 # Build and Test
 In order to run our game, navigate to the project folder and press on the "Solution" file named "KerlkraftSolution.sln".
-Once you are there, press on "Run" and enjoy our little mini game.
+Once there, press on "Run" and enjoy our little mini game.
+
